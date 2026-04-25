@@ -47,6 +47,11 @@ async function getAccessToken() {
   return tokenCache.token;
 }
 
+// ── 루트 ──
+app.get('/', (req, res) => {
+  res.json({ service: '연금GPT 백엔드', status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // ── 헬스체크 ──
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
