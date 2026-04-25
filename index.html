@@ -3,15 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>연금GPT</title>
+<title>연금GPT — 내 연금 AI 진단</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0d1f3c;--navy2:#162d52;--gold:#c8a96e;--gold2:#e8c98e;--cream:#f7f3ec;--cream2:#ede8df;--text:#1a1a2e;--muted:#6b7080;--white:#fff;--green:#1a6b4a;--green-bg:#edf7f2;--red:#b03030;--red-bg:#fdf0f0;--blue:#1a4a8a;--blue-bg:#eef3fb;--warn-bg:#fffbeb;--warn:#92400e}
+:root{
+  --navy:#0d1f3c;--navy2:#162d52;--gold:#c8a96e;--gold2:#e8c98e;
+  --cream:#f7f3ec;--cream2:#ede8df;--text:#1a1a2e;--muted:#6b7080;
+  --white:#fff;--green:#1a6b4a;--green-bg:#edf7f2;
+  --red:#b03030;--red-bg:#fdf0f0;--blue:#1a4a8a;--blue-bg:#eef3fb;
+  --warn-bg:#fffbeb;--warn:#92400e;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+/* TOPBAR */
 .topbar{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.25)}
-.logo{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--gold);cursor:pointer;user-select:none}
+.logo{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--gold);cursor:pointer}
 .logo span{color:var(--white)}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .user-chip{display:none;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;cursor:pointer}
@@ -22,8 +30,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:none}
 .logout-btn.show{display:block}
 .topbar-cta{background:var(--gold);color:var(--navy);border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+
+/* SCREENS */
 .screen{display:none;min-height:calc(100vh - 56px)}
 .screen.active{display:block}
+
+/* ── LANDING ── */
 .hero{background:var(--navy);min-height:90vh;display:flex;align-items:center;justify-content:center;padding:80px 24px 60px;position:relative;overflow:hidden;text-align:center}
 .hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(200,169,110,.07),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,169,110,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,169,110,.04) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
@@ -51,29 +63,42 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .how-d{font-size:13px;color:var(--muted);line-height:1.7}
 .how-tag{display:inline-block;margin-top:10px;font-size:11px;padding:3px 10px;background:var(--cream);color:var(--muted);border-radius:20px}
 .sec-btn{background:var(--navy);color:var(--white);border:none;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:20px;transition:all .2s}
-.auth-outer{max-width:480px;margin:0 auto;padding:40px 24px 80px}
-.auth-tabs{display:flex;background:var(--cream2);border-radius:10px;padding:4px;margin-bottom:24px}
-.auth-tab{flex:1;padding:10px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:transparent;font-family:'Noto Sans KR',sans-serif;color:var(--muted);transition:all .2s}
-.auth-tab.active{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.sec-btn:hover{background:var(--navy2)}
+
+/* ── AUTH ── */
+.auth-outer{max-width:520px;margin:0 auto;padding:40px 24px 80px}
 .auth-card{background:var(--white);border-radius:16px;padding:36px;border:1px solid var(--cream2)}
 .auth-icon{font-size:40px;margin-bottom:16px;text-align:center}
-.auth-h{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;text-align:center}
-.auth-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:24px;text-align:center}
+.auth-h{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px;text-align:center}
+.auth-sub{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px;text-align:center}
+.auth-method-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.auth-method-btn{padding:14px 8px;border:1.5px solid var(--cream2);border-radius:10px;background:var(--white);cursor:pointer;font-size:13px;font-weight:700;font-family:'Noto Sans KR',sans-serif;color:var(--text);transition:all .2s;text-align:center}
+.auth-method-btn:hover{border-color:var(--gold);background:var(--cream)}
+.auth-method-btn.selected{border-color:var(--gold);background:var(--cream)}
+.auth-method-btn.kakao{background:#FEE500;border-color:#FEE500;color:#1a1a1a}
 .f-lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;display:block;letter-spacing:.3px;margin-top:12px}
-.f-lbl:first-of-type{margin-top:0}
 .f-inp{width:100%;padding:11px 13px;border:1.5px solid var(--cream2);border-radius:8px;font-size:14px;font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--cream);transition:border-color .2s}
 .f-inp:focus{outline:none;border-color:var(--gold);background:var(--white)}
 .f-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .f-submit{width:100%;background:var(--navy);color:var(--white);border:none;padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:16px;transition:background .2s}
 .f-submit:hover{background:var(--navy2)}
+.f-submit:disabled{opacity:.5;cursor:not-allowed}
 .err-msg{font-size:12px;color:var(--red);margin-top:6px;display:none}
 .err-msg.show{display:block}
-.divider-or{display:flex;align-items:center;gap:10px;margin:20px 0;color:var(--muted);font-size:12px}
+.divider-or{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--muted);font-size:12px}
 .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--cream2)}
-.social-btn{width:100%;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid var(--cream2);background:var(--white);display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Noto Sans KR',sans-serif;color:var(--text);transition:all .2s;margin-bottom:8px}
-.social-btn:hover{border-color:var(--gold);background:var(--cream)}
-.social-btn.kakao{background:#FEE500;border-color:#FEE500;color:#1a1a1a}
-.pension-input-wrap{max-width:600px;margin:0 auto;padding:32px 24px 100px}
+
+/* ── STATUS BOX ── */
+.status-box{border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:10px;font-size:13px;margin-top:14px}
+.status-box.info{background:var(--blue-bg);color:var(--blue)}
+.status-box.success{background:var(--green-bg);color:var(--green)}
+.status-box.warn{background:var(--warn-bg);color:var(--warn)}
+.status-box.error{background:var(--red-bg);color:var(--red)}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── PENSION INPUT ── */
+.pi-wrap{max-width:600px;margin:0 auto;padding:32px 24px 100px}
 .pi-step-bar{display:flex;gap:0;margin-bottom:32px}
 .pi-step{flex:1;text-align:center;font-size:11px;padding-bottom:10px;border-bottom:2px solid var(--cream2);color:var(--muted);transition:all .2s}
 .pi-step.active{border-bottom-color:var(--gold);color:var(--navy);font-weight:700}
@@ -83,21 +108,22 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .pi-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6}
 .pdf-zone{border:2px dashed var(--cream2);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px}
 .pdf-zone:hover,.pdf-zone.drag{border-color:var(--gold);background:var(--cream)}
-.pdf-ico{font-size:32px;margin-bottom:8px}
-.pdf-txt{font-size:13px;color:var(--muted)}
-.pdf-ok{font-size:12px;color:var(--green);font-weight:700;margin-top:6px}
 .skip-link{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;display:block;text-align:center;margin-top:8px}
 .range-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .range-val{font-size:13px;font-weight:700;width:70px;text-align:right;flex-shrink:0}
 .next-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:background .2s}
+.next-btn:hover{background:var(--navy2)}
+
+/* ── LOADING ── */
 .loading-wrap{max-width:400px;margin:80px auto;padding:0 24px;text-align:center}
 .spinner{width:54px;height:54px;border:3px solid var(--cream2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 26px}
-@keyframes spin{to{transform:rotate(360deg)}}
 .loading-h{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px}
 .loading-m{font-size:13px;color:var(--muted);margin-bottom:26px}
 .l-step{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--white);border:1px solid var(--cream2);font-size:13px;color:var(--muted);margin-bottom:8px;transition:all .3s}
 .l-step.active{border-color:var(--gold);color:var(--navy);background:var(--cream)}
 .l-step.done{border-color:#bbf7d0;color:var(--green);background:var(--green-bg)}
+
+/* ── DASHBOARD ── */
 .dash{max-width:1000px;margin:0 auto;padding:28px 24px 100px}
 .dash-greet{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:4px}
 .dash-meta{font-size:13px;color:var(--muted);margin-bottom:20px}
@@ -110,7 +136,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .al-u .al-t{color:var(--red)}.al-w .al-t{color:var(--warn)}.al-i .al-t{color:var(--blue)}
 .al-d{font-size:12px;color:var(--muted);line-height:1.6}
 .al-btn{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;border:none;cursor:pointer;margin-top:6px;font-family:'Noto Sans KR',sans-serif}
-.al-u .al-btn{background:var(--red);color:var(--white)}.al-w .al-btn{background:#d97706;color:var(--white)}.al-i .al-btn{background:var(--blue);color:var(--white)}
+.al-u .al-btn{background:var(--red);color:var(--white)}
+.al-w .al-btn{background:#d97706;color:var(--white)}
+.al-i .al-btn{background:var(--blue);color:var(--white)}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .kpi{background:var(--white);border:1px solid var(--cream2);border-radius:12px;padding:18px 16px}
 .kpi-lbl{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:5px;letter-spacing:.3px}
@@ -147,6 +175,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .mini-table tr:last-child td{border-bottom:none}
 .mini-table td:last-child{text-align:right;font-weight:600}
 .td-m{color:var(--muted)}
+
+/* ── AI ANALYSIS ── */
 .ai-bar{background:var(--navy);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:14px;margin-bottom:22px}
 .ai-av{width:42px;height:42px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .ai-name-t{font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px}
@@ -156,13 +186,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .ab-icon{font-size:17px}.ab-title{font-size:14px;font-weight:700;color:var(--navy)}
 .ab-body{padding:16px 18px;font-size:13px;color:var(--text);line-height:1.8}
 .tag{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;display:inline-block;margin:3px 3px 0 0}
-.tag-r{background:var(--red-bg);color:var(--red)}.tag-g{background:var(--green-bg);color:var(--green)}.tag-b{background:var(--blue-bg);color:var(--blue)}.tag-gold{background:#fef9ec;color:#8b6914}
+.tag-r{background:var(--red-bg);color:var(--red)}
+.tag-g{background:var(--green-bg);color:var(--green)}
+.tag-b{background:var(--blue-bg);color:var(--blue)}
+.tag-gold{background:#fef9ec;color:#8b6914}
 .act-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
 .act-num{width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--white);margin-top:1px}
 .act-t{font-size:13px;font-weight:600;margin-bottom:2px}
 .act-s{font-size:12px;color:var(--muted)}
+
+/* ── RECOMMEND ── */
 .rec-card{background:var(--white);border:1.5px solid var(--cream2);border-radius:12px;padding:20px;margin-bottom:14px;position:relative;transition:border-color .2s}
-.rec-card:hover{border-color:var(--gold)}.rec-card.best{border-color:var(--gold)}
+.rec-card:hover{border-color:var(--gold)}
+.rec-card.best{border-color:var(--gold)}
 .rec-pill{position:absolute;top:-11px;left:16px;background:var(--gold);color:var(--navy);font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px}
 .rec-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
 .rec-name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:3px}
@@ -179,6 +215,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .tax-lbl{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:4px}
 .tax-val{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--white)}
 .tax-val.gold{color:var(--gold2)}
+
+/* ── MYPAGE ── */
 .my-wrap{max-width:640px;margin:0 auto;padding:28px 24px 100px}
 .my-profile{background:var(--navy);border-radius:14px;padding:28px;margin-bottom:20px;display:flex;align-items:center;gap:18px}
 .my-avatar-big{width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -196,6 +234,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .my-danger-txt{font-size:13px;color:var(--red);font-weight:600}
 .my-danger-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .danger-btn{background:var(--red);color:var(--white);border:none;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+
+/* ── BOTTOM NAV ── */
 .bnav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--cream2);display:none;z-index:90}
 .bnav.show{display:flex}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;cursor:pointer;font-size:10px;color:var(--muted);border:none;background:none;font-family:'Noto Sans KR',sans-serif;transition:color .15s}
@@ -205,11 +245,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 .center-btn{text-align:center;margin-top:20px}
 .main-btn{background:var(--navy);color:var(--white);border:none;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s}
 .main-btn:hover{background:var(--navy2)}
-@media(max-width:680px){.kpi-grid{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}.hero-stats{gap:28px}.tax-result{grid-template-columns:1fr}.my-profile{flex-direction:column;text-align:center}}
+
+@media(max-width:680px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .two-col{grid-template-columns:1fr}
+  .hero-stats{gap:28px}
+  .tax-result{grid-template-columns:1fr}
+  .my-profile{flex-direction:column;text-align:center}
+  .auth-method-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
   <div class="logo" onclick="goHome()">연금<span>GPT</span></div>
   <div class="topbar-right">
@@ -218,20 +267,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
       <span class="u-name" id="uName">사용자</span>
     </div>
     <button class="logout-btn" id="logoutBtn" onclick="doLogout()">로그아웃</button>
-    <button class="topbar-cta" id="topCta" onclick="goScreen('auth')">시작하기</button>
+    <button class="topbar-cta" id="topCta" onclick="goScreen('auth')">내 연금 조회하기</button>
   </div>
 </div>
 
-<!-- LANDING -->
+<!-- ══ LANDING ══ -->
 <div class="screen active" id="screen-landing">
   <div class="hero">
     <div class="hero-glow"></div><div class="hero-grid"></div>
     <div class="hero-content">
       <div class="eyebrow">AI 연금 진단 서비스</div>
       <h1 class="hero-h">내 연금,<br><em>지금 충분한가요?</em></h1>
-      <p class="hero-sub">국민연금 · 퇴직연금 · 개인연금을 한 번에 조회하고<br><strong>AI가 부족한 노후 소득을 정확히 진단</strong>해 드립니다</p>
+      <p class="hero-sub">국민연금 · IRP · 개인연금을 한 번에 조회하고<br><strong>AI가 부족한 노후 소득을 정확히 진단</strong>해 드립니다</p>
       <div class="hero-btns">
-        <button class="btn-gold" onclick="goScreen('auth')">무료로 시작하기 →</button>
+        <button class="btn-gold" onclick="goScreen('auth')">무료로 내 연금 조회하기 →</button>
         <button class="btn-ghost" onclick="document.querySelector('.how').scrollIntoView({behavior:'smooth'})">어떻게 작동하나요?</button>
       </div>
       <div class="hero-stats">
@@ -245,194 +294,165 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
     <p class="sec-tag">서비스 흐름</p>
     <h2 class="sec-h">단 3분, 4단계로 완전한 연금 진단</h2>
     <div class="how-grid">
-      <div class="how-step"><div class="how-n">01</div><div class="how-t">회원가입 / 로그인</div><div class="how-d">이메일로 가입하거나 카카오로 간편 시작</div><span class="how-tag">30초</span></div>
-      <div class="how-step"><div class="how-n">02</div><div class="how-t">연금 정보 입력</div><div class="how-d">PDF 업로드 또는 직접 수치 입력</div><span class="how-tag">2분</span></div>
-      <div class="how-step"><div class="how-n">03</div><div class="how-t">AI 심층 진단</div><div class="how-d">부족 금액·시나리오·세금 혜택 자동 분석</div><span class="how-tag">즉시</span></div>
-      <div class="how-step"><div class="how-n">04</div><div class="how-t">맞춤 상품 추천</div><div class="how-d">IRP·연금저축 상품 비교 및 제안</div><span class="how-tag">즉시</span></div>
+      <div class="how-step"><div class="how-n">01</div><div class="how-t">간편인증</div><div class="how-d">카카오·네이버로 금융감독원에 바로 연결</div><span class="how-tag">30초</span></div>
+      <div class="how-step"><div class="how-n">02</div><div class="how-t">연금 자동 조회</div><div class="how-d">IRP·개인연금·퇴직연금 한 번에 조회</div><span class="how-tag">자동</span></div>
+      <div class="how-step"><div class="how-n">03</div><div class="how-t">AI 심층 진단</div><div class="how-d">부족 금액·시나리오·세금 혜택 분석</div><span class="how-tag">즉시</span></div>
+      <div class="how-step"><div class="how-n">04</div><div class="how-t">맞춤 상품 추천</div><div class="how-d">IRP·연금저축 최적 상품 비교 제안</div><span class="how-tag">즉시</span></div>
     </div>
     <button class="sec-btn" onclick="goScreen('auth')">지금 무료로 시작하기 →</button>
   </div>
 </div>
 
-<!-- AUTH — 통합 인증 (연금 조회 + 회원가입 한 번에) -->
+<!-- ══ AUTH ══ -->
 <div class="screen" id="screen-auth">
-  <div class="auth-outer" style="max-width:520px">
+  <div class="auth-outer">
 
-    <!-- 메인 카드: 금융감독원 연동 -->
+    <!-- 메인: 금융감독원 연동 조회 -->
     <div class="auth-card" style="margin-bottom:14px">
       <div class="auth-icon">🏦</div>
       <div class="auth-h">내 연금 한 번에 조회하기</div>
       <div class="auth-sub">간편인증 한 번으로 금융감독원에서<br>국민연금 · IRP · 개인연금을 자동으로 불러옵니다</div>
 
-      <!-- 인증 방식 버튼 -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
-        <button onclick="selectMainAuth('5','kakao')" id="mainAuthKakao"
-          style="padding:14px 8px;border:1.5px solid #FEE500;border-radius:10px;background:#FEE500;cursor:pointer;font-size:13px;font-weight:700;font-family:'Noto Sans KR',sans-serif;color:#1a1a1a;transition:all .2s">
-          💛 카카오<br><span style="font-weight:400;font-size:11px">간편인증</span>
+      <div class="auth-method-grid">
+        <button class="auth-method-btn kakao" id="btn-kakao" onclick="selectAuth('5','kakao')">
+          💛 카카오<br><span style="font-size:11px;font-weight:400">간편인증</span>
         </button>
-        <button onclick="selectMainAuth('6','naver')" id="mainAuthNaver"
-          style="padding:14px 8px;border:1.5px solid var(--cream2);border-radius:10px;background:var(--white);cursor:pointer;font-size:13px;font-weight:700;font-family:'Noto Sans KR',sans-serif;color:var(--text);transition:all .2s">
-          🟢 네이버<br><span style="font-weight:400;font-size:11px;color:var(--muted)">간편인증</span>
+        <button class="auth-method-btn" id="btn-naver" onclick="selectAuth('6','naver')">
+          🟢 네이버<br><span style="font-size:11px;font-weight:400;color:var(--muted)">간편인증</span>
         </button>
-        <button onclick="selectMainAuth('0','cert')" id="mainAuthCert"
-          style="padding:14px 8px;border:1.5px solid var(--cream2);border-radius:10px;background:var(--white);cursor:pointer;font-size:13px;font-weight:700;font-family:'Noto Sans KR',sans-serif;color:var(--text);transition:all .2s">
-          📜 공동<br><span style="font-weight:400;font-size:11px;color:var(--muted)">인증서</span>
+        <button class="auth-method-btn" id="btn-cert" onclick="selectAuth('0','cert')">
+          📜 공동인증서<br><span style="font-size:11px;font-weight:400;color:var(--muted)">구 공인인증서</span>
         </button>
       </div>
 
-      <!-- 인증 입력 폼 -->
-      <div id="mainAuthForm" style="display:none">
-        <div class="f-row2" style="margin-bottom:0">
-          <div>
-            <label class="f-lbl">이름</label>
-            <input class="f-inp" id="ma-name" placeholder="홍길동">
-          </div>
-          <div>
-            <label class="f-lbl">생년월일</label>
-            <input class="f-inp" id="ma-birth" placeholder="19771205" maxlength="8">
-          </div>
+      <!-- 입력 폼 -->
+      <div id="authForm" style="display:none">
+        <div class="f-row2">
+          <div><label class="f-lbl">이름</label><input class="f-inp" id="a-name" placeholder="홍길동"></div>
+          <div><label class="f-lbl">생년월일 8자리</label><input class="f-inp" id="a-birth" placeholder="19771205" maxlength="8"></div>
         </div>
-        <label class="f-lbl" style="margin-top:10px">주민등록번호</label>
-        <input class="f-inp" id="ma-identity" type="password" placeholder="771205-1234567" style="margin-bottom:6px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6">
-          🔒 주민번호는 CODEF 서버로 암호화 전송되며 저장되지 않습니다
-        </div>
-        <button id="mainAuthBtn" onclick="startMainAuth()"
-          style="width:100%;padding:14px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif">
-          금융감독원에서 내 연금 조회하기 →
-        </button>
+        <label class="f-lbl">주민등록번호 (하이픈 없이)</label>
+        <input class="f-inp" id="a-identity" type="password" placeholder="7712051234567" maxlength="13">
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6">🔒 주민번호는 CODEF 서버로 암호화 전송되며 저장되지 않습니다</div>
+        <button class="f-submit" id="authSubmitBtn" onclick="startAuth()">금융감독원에서 내 연금 조회하기 →</button>
       </div>
 
-      <!-- 진행 상태 -->
-      <div id="mainAuthStatus" style="display:none;margin-top:14px">
-        <div style="display:flex;align-items:center;gap:10px;padding:13px;background:var(--blue-bg);border-radius:8px;font-size:13px;color:var(--blue)" id="mainStatusMsg">
-          <span style="display:inline-block;width:16px;height:16px;border:2px solid #bfdbfe;border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0"></span>
-          <span id="mainStatusTxt">금융감독원 접속 중...</span>
+      <!-- 상태 표시 -->
+      <div id="authStatus" style="display:none;margin-top:14px">
+        <div class="status-box info" id="authStatusBox">
+          <div class="spin"></div>
+          <span id="authStatusTxt">금융감독원 접속 중...</span>
         </div>
         <!-- 2차 인증 -->
-        <div id="mainTwoWay" style="display:none;margin-top:10px">
-          <div style="padding:14px;background:var(--warn-bg);border:1px solid #fde68a;border-radius:8px;font-size:13px;color:var(--warn);line-height:1.7;margin-bottom:10px">
-            📱 <strong>카카오톡/PASS 앱을 확인해주세요!</strong><br>인증 요청이 발송됐습니다. 앱에서 승인 후 아래 버튼을 눌러주세요.
+        <div id="twoWayBox" style="display:none;margin-top:10px">
+          <div class="status-box warn" style="margin-bottom:10px;display:block;line-height:1.7">
+            📱 <strong>카카오톡 / PASS 앱을 확인해주세요!</strong><br>
+            인증 요청이 발송되었습니다. 앱에서 승인 후 아래 버튼을 눌러주세요.
           </div>
-          <button onclick="completeMainTwoWay()"
-            style="width:100%;padding:13px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif">
+          <button onclick="completeTwoWay()" style="width:100%;padding:13px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif">
             ✅ 인증 승인했습니다 — 조회 완료하기
           </button>
         </div>
       </div>
-
-      <div style="margin-top:16px;font-size:11px;color:var(--muted);text-align:center;line-height:1.7">
-        금융감독원 마이데이터 · CODEF API 연동<br>
-        조회 정보는 분석 후 암호화 저장됩니다
-      </div>
     </div>
 
-    <!-- 하단: PDF 업로드 또는 직접입력 대안 -->
-    <div style="background:var(--white);border:1px solid var(--cream2);border-radius:12px;padding:18px 20px">
+    <!-- 대안: PDF / 직접입력 -->
+    <div style="background:var(--white);border:1px solid var(--cream2);border-radius:12px;padding:18px 20px;margin-bottom:14px">
       <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px">📄 간편인증 대신 다른 방법으로 시작하기</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <button onclick="goAltMethod('pdf')"
-          style="padding:12px;border:1px solid var(--cream2);border-radius:8px;background:var(--cream);font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;color:var(--text);text-align:center">
+        <button onclick="goAltMethod('pdf')" style="padding:12px;border:1px solid var(--cream2);border-radius:8px;background:var(--cream);font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;color:var(--text)">
           📄 국민연금 PDF<br><span style="font-weight:400;color:var(--muted)">확인서 업로드</span>
         </button>
-        <button onclick="goAltMethod('manual')"
-          style="padding:12px;border:1px solid var(--cream2);border-radius:8px;background:var(--cream);font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;color:var(--text);text-align:center">
+        <button onclick="goAltMethod('manual')" style="padding:12px;border:1px solid var(--cream2);border-radius:8px;background:var(--cream);font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;color:var(--text)">
           ✏️ 직접 입력<br><span style="font-weight:400;color:var(--muted)">수치 직접 입력</span>
         </button>
       </div>
     </div>
 
-    <!-- 이미 조회한 적 있으면 이메일 로그인 -->
-    <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted)">
+    <!-- 이메일 로그인 (재방문자) -->
+    <div style="text-align:center;font-size:13px;color:var(--muted)">
       이전에 저장한 데이터가 있으신가요?
-      <button onclick="showEmailLogin()" style="background:none;border:none;color:var(--gold);font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:13px">이메일로 로그인</button>
+      <button onclick="toggleEmailLogin()" style="background:none;border:none;color:var(--gold);font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:13px">이메일로 로그인</button>
     </div>
-
-    <!-- 이메일 로그인 (숨김) -->
-    <div id="emailLoginArea" style="display:none;margin-top:14px">
+    <div id="emailLoginBox" style="display:none;margin-top:14px">
       <div class="auth-card">
-        <div class="auth-h" style="font-size:18px">이메일 로그인</div>
-        <label class="f-lbl" style="margin-top:14px">이메일</label>
-        <input class="f-inp" id="li-email" type="email" placeholder="example@email.com" onkeydown="if(event.key==='Enter')doLogin()">
+        <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px">이메일 로그인</div>
+        <label class="f-lbl">이메일</label>
+        <input class="f-inp" id="li-email" type="email" placeholder="example@email.com" onkeydown="if(event.key==='Enter')doEmailLogin()">
         <label class="f-lbl">비밀번호</label>
-        <input class="f-inp" id="li-pw" type="password" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()">
+        <input class="f-inp" id="li-pw" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doEmailLogin()">
         <div class="err-msg" id="li-err">이메일 또는 비밀번호가 올바르지 않습니다.</div>
-        <button class="f-submit" onclick="doLogin()">로그인</button>
+        <button class="f-submit" onclick="doEmailLogin()">로그인</button>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- PENSION INPUT -->
+<!-- ══ PENSION INPUT ══ -->
 <div class="screen" id="screen-pension-input">
-  <div class="pension-input-wrap">
-    <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px">연금 정보를 입력해주세요</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:24px">정확할수록 더 정밀한 분석이 가능합니다</div>
+  <div class="pi-wrap">
+    <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px">연금 정보 입력</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:24px">정확할수록 더 정밀한 진단이 가능합니다</div>
     <div class="pi-step-bar">
       <div class="pi-step active" id="pis1">① 국민연금</div>
       <div class="pi-step" id="pis2">② 개인연금</div>
       <div class="pi-step" id="pis3">③ 목표 설정</div>
     </div>
+
+    <!-- STEP 1: 국민연금 -->
     <div id="pi-step1">
       <div class="pi-card">
         <div class="pi-h">📄 국민연금 확인서 업로드</div>
         <div class="pi-sub">국민연금 앱 → 증명서 발급 → 가입내역 확인서(PDF)를 업로드하면 자동으로 읽어옵니다.</div>
-        <div class="pdf-zone" id="pdfZone" onclick="document.getElementById('pdfFile').click()" ondragover="onDrag(event,true)" ondragleave="onDrag(event,false)" ondrop="onDrop(event)">
-          <div class="pdf-ico">📄</div>
-          <div class="pdf-txt">PDF 드래그 또는 클릭하여 업로드</div>
-          <div class="pdf-ok" id="pdfOk"></div>
+        <div class="pdf-zone" onclick="document.getElementById('pdfFile').click()" ondragover="onDrag(event,true)" ondragleave="onDrag(event,false)" ondrop="onDrop(event)" id="pdfZone">
+          <div style="font-size:32px;margin-bottom:8px">📄</div>
+          <div style="font-size:13px;color:var(--muted)">PDF 드래그 또는 클릭하여 업로드</div>
+          <div style="font-size:12px;color:var(--green);font-weight:700;margin-top:6px" id="pdfOk"></div>
         </div>
         <input type="file" id="pdfFile" accept=".pdf,image/*" style="display:none" onchange="onPdfFile(event)">
         <div class="skip-link" onclick="document.getElementById('manualCard').style.display=''">PDF 없이 직접 입력하겠습니다 ↓</div>
       </div>
       <div class="pi-card" id="manualCard" style="display:none">
         <div class="pi-h">✏️ 직접 입력</div>
+        <div class="pi-sub">국민연금 앱 '내연금 알아보기'에서 확인한 수치를 입력하세요.</div>
         <label class="f-lbl">납부 기간 (개월)</label><input class="f-inp" id="pi-months" type="number" placeholder="예: 150">
         <label class="f-lbl">총 납부 보험료 (만원)</label><input class="f-inp" id="pi-paid" type="number" placeholder="예: 1424">
         <label class="f-lbl">예상 월 수령액 (만원, 모르면 비워두세요)</label><input class="f-inp" id="pi-pension" type="number" placeholder="예: 62">
         <label class="f-lbl">미납 보험료 (만원, 없으면 0)</label><input class="f-inp" id="pi-unpaid" type="number" placeholder="0" value="0">
       </div>
-      <button class="next-btn" onclick="piStep(2)">다음 — 개인연금 정보 →</button>
+      <button class="next-btn" onclick="piStep(2)">다음 → 개인연금 확인</button>
     </div>
-    <div id="pi-step2" style="display:none">
 
-      <!-- 이미 자동 조회된 경우 안내 -->
-      <div class="pi-card" style="border:1.5px solid var(--green);background:var(--green-bg)">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <!-- STEP 2: 개인연금 (자동 입력됨) -->
+    <div id="pi-step2" style="display:none">
+      <div class="pi-card" id="autoFilledCard" style="border:1.5px solid var(--green);background:var(--green-bg);display:none">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
           <span style="font-size:20px">✅</span>
           <div>
-            <div style="font-size:14px;font-weight:700;color:var(--green)">금융감독원에서 자동 조회됨</div>
-            <div style="font-size:12px;color:var(--green);margin-top:2px">IRP · 개인연금 · 퇴직연금이 아래에 자동 입력되었습니다</div>
+            <div style="font-size:14px;font-weight:700;color:var(--green)">금융감독원 자동 조회 완료</div>
+            <div style="font-size:12px;color:var(--green);margin-top:2px">IRP · 개인연금 · 퇴직연금이 아래에 자동 입력됐습니다. 금액이 다르면 수정하세요.</div>
           </div>
         </div>
-        <div style="font-size:12px;color:var(--green);line-height:1.6">
-          금액이 맞지 않으면 아래에서 직접 수정할 수 있습니다.
-        </div>
       </div>
-
-      <!-- 입력란 -->
       <div class="pi-card">
         <div class="pi-h">💼 개인연금 · 퇴직연금 현황 <span style="font-size:11px;font-weight:400;color:var(--green)" id="autoFillBadge"></span></div>
-        <div class="pi-sub">자동 조회된 값을 확인하고 필요하면 수정하세요.</div>
-        <label class="f-lbl">퇴직연금 적립액 (만원)</label>
-        <input class="f-inp" id="pi-retire" type="number" placeholder="예: 3200" value="0">
-        <label class="f-lbl">개인연금 적립액 (만원)</label>
-        <input class="f-inp" id="pi-personal-amt" type="number" placeholder="예: 800" value="0">
-        <label class="f-lbl">IRP 적립액 (만원)</label>
-        <input class="f-inp" id="pi-irp" type="number" placeholder="예: 500" value="0">
-        <label class="f-lbl">월 추가 저축 가능액 (만원)</label>
-        <input class="f-inp" id="pi-extra" type="number" placeholder="예: 50" value="30">
+        <div class="pi-sub">없는 항목은 0으로 입력하세요.</div>
+        <label class="f-lbl">퇴직연금 적립액 (만원)</label><input class="f-inp" id="pi-retire" type="number" placeholder="예: 3200" value="0">
+        <label class="f-lbl">개인연금 적립액 (만원)</label><input class="f-inp" id="pi-personal-amt" type="number" placeholder="예: 800" value="0">
+        <label class="f-lbl">IRP 적립액 (만원)</label><input class="f-inp" id="pi-irp" type="number" placeholder="예: 500" value="0">
+        <label class="f-lbl">월 추가 저축 가능액 (만원)</label><input class="f-inp" id="pi-extra" type="number" placeholder="예: 50" value="30">
       </div>
-
       <div style="display:flex;gap:10px">
         <button class="next-btn" style="background:var(--cream2);color:var(--text);flex:0 0 80px" onclick="piStep(1)">← 이전</button>
-        <button class="next-btn" style="flex:1" onclick="piStep(3)">다음 — 목표 설정 →</button>
+        <button class="next-btn" style="flex:1" onclick="piStep(3)">다음 → 목표 설정</button>
       </div>
     </div>
+
+    <!-- STEP 3: 목표 설정 -->
     <div id="pi-step3" style="display:none">
       <div class="pi-card">
         <div class="pi-h">🎯 은퇴 목표 설정</div>
+        <div class="pi-sub">목표에 맞춰 AI가 부족 금액과 전략을 계산합니다.</div>
         <label class="f-lbl">목표 월 생활비 (만원)</label>
         <div class="range-row"><input type="range" min="100" max="600" step="10" value="300" id="pi-target-range" oninput="document.getElementById('pi-target-val').textContent=this.value+'만원'" style="flex:1"><span class="range-val" id="pi-target-val">300만원</span></div>
         <label class="f-lbl">목표 은퇴 나이</label>
@@ -448,7 +468,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
   </div>
 </div>
 
-<!-- LOADING -->
+<!-- ══ LOADING ══ -->
 <div class="screen" id="screen-loading">
   <div class="loading-wrap">
     <div class="spinner"></div>
@@ -461,7 +481,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ══ DASHBOARD ══ -->
 <div class="screen" id="screen-dashboard">
   <div class="dash">
     <div class="dash-greet" id="dashGreet">안녕하세요 👋</div>
@@ -481,7 +501,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
     </div>
     <div class="two-col">
       <div class="card">
-        <div class="card-h">연금 구성 <span class="cbadge">입력 기준</span></div>
+        <div class="card-h">연금 구성 <span class="cbadge">조회 기준</span></div>
         <div class="pr"><div class="pr-lbl">국민연금</div><div class="pr-track"><div class="pr-fill" id="b1" style="background:#0d1f3c"></div></div><div class="pr-val" id="bv1">—</div></div>
         <div class="pr"><div class="pr-lbl">퇴직연금</div><div class="pr-track"><div class="pr-fill" id="b2" style="background:#c8a96e"></div></div><div class="pr-val" id="bv2">—</div></div>
         <div class="pr"><div class="pr-lbl">개인연금</div><div class="pr-track"><div class="pr-fill" id="b3" style="background:#1a6b4a"></div></div><div class="pr-val" id="bv3">—</div></div>
@@ -498,7 +518,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
   </div>
 </div>
 
-<!-- AI ANALYSIS -->
+<!-- ══ AI ANALYSIS ══ -->
 <div class="screen" id="screen-analysis">
   <div class="dash">
     <div class="ai-bar">
@@ -510,7 +530,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
   </div>
 </div>
 
-<!-- RECOMMEND -->
+<!-- ══ RECOMMEND ══ -->
 <div class="screen" id="screen-recommend">
   <div class="dash">
     <div class="dash-greet">맞춤 연금 상품 추천</div>
@@ -523,14 +543,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
       <div><span class="tag tag-gold">세액공제 148만원</span><span class="tag tag-b">ETF 투자 가능</span><span class="tag tag-g">수수료 0.18%</span></div>
       <div class="rec-bar-lbl"><span>노후 목표 기여도</span><span>+32%p</span></div><div class="rec-bar-track"><div class="rec-bar-fill" style="width:90%"></div></div>
       <div class="rec-reason">월 50만원 납입 시 65세까지 약 1.26억 예상. 국내외 ETF 분산 투자 가능. 수수료 업계 최저 수준.</div>
-      <button class="apply-btn" onclick="alert('미래에셋증권 공식 앱으로 이동합니다.')">미래에셋증권 공식 앱에서 가입하기 →</button>
+      <button class="apply-btn" onclick="alert('미래에셋증권 공식 앱으로 이동합니다.\n비대면 개설 약 20분 소요됩니다.')">미래에셋증권에서 가입하기 →</button>
     </div>
     <div class="rec-card">
       <div class="rec-top"><div><div class="rec-name">삼성증권 IRP</div><div class="rec-co">삼성증권 · 개인형 퇴직연금</div></div><div class="rec-yield">6.9<small>%</small></div></div>
       <div><span class="tag tag-gold">세액공제 148만원</span><span class="tag tag-g">원리금보장 선택가능</span></div>
       <div class="rec-bar-lbl"><span>노후 목표 기여도</span><span>+28%p</span></div><div class="rec-bar-track"><div class="rec-bar-fill" style="width:76%"></div></div>
       <div class="rec-reason">안정형 운용 선호 시 적합. 예금자보호 적용 상품 선택 가능.</div>
-      <button class="apply-btn" onclick="alert('삼성증권 공식 앱으로 이동합니다.')">삼성증권 공식 앱에서 가입하기 →</button>
+      <button class="apply-btn" onclick="alert('삼성증권 공식 앱으로 이동합니다.')">삼성증권에서 가입하기 →</button>
     </div>
     <div class="sec-lbl" style="margin-top:20px">📈 연금저축펀드 — 병행 추천</div>
     <div class="rec-card">
@@ -538,7 +558,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
       <div><span class="tag tag-b">세액공제 66만원</span><span class="tag tag-gold">ETF 자유투자</span><span class="tag tag-g">수수료 0.15%</span></div>
       <div class="rec-bar-lbl"><span>노후 목표 기여도</span><span>+23%p</span></div><div class="rec-bar-track"><div class="rec-bar-fill" style="width:68%"></div></div>
       <div class="rec-reason">IRP와 병행 시 총 세액공제 한도 1,800만원. 국내 ETF 직접 매매 가능.</div>
-      <button class="apply-btn" onclick="alert('한국투자증권 공식 앱으로 이동합니다.')">한국투자증권 공식 앱에서 가입하기 →</button>
+      <button class="apply-btn" onclick="alert('한국투자증권 공식 앱으로 이동합니다.')">한국투자증권에서 가입하기 →</button>
     </div>
     <div class="full-card" style="margin-top:16px">
       <div class="card-h">💰 세액공제 환급액 계산기</div>
@@ -555,7 +575,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
   </div>
 </div>
 
-<!-- MY PAGE -->
+<!-- ══ MYPAGE ══ -->
 <div class="screen" id="screen-mypage">
   <div class="my-wrap">
     <div class="my-profile">
@@ -565,18 +585,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
     <div class="my-section"><div class="my-section-h">내 연금 요약</div><div id="mySummary"></div></div>
     <div class="my-section">
       <div class="my-section-h">설정</div>
-      <div class="my-row"><span class="my-row-lbl">연금 정보 수정</span><button class="my-edit-btn" onclick="goScreen('pension-input')">수정하기</button></div>
+      <div class="my-row"><span class="my-row-lbl">연금 정보 수정</span><button class="my-edit-btn" onclick="goScreen('pension-input');piStep(1)">수정하기</button></div>
       <div class="my-row"><span class="my-row-lbl">목표 생활비</span><span class="my-row-val" id="myTarget">—</span></div>
       <div class="my-row"><span class="my-row-lbl">목표 은퇴 나이</span><span class="my-row-val" id="myRetireAge">—</span></div>
       <div class="my-row"><span class="my-row-lbl">기대 수명</span><span class="my-row-val" id="myLifeAge">—</span></div>
     </div>
     <div class="my-danger">
-      <div><div class="my-danger-txt">로그아웃</div><div class="my-danger-sub">다른 계정으로 전환하거나 서비스를 종료합니다</div></div>
+      <div><div class="my-danger-txt">로그아웃</div><div class="my-danger-sub">다른 계정으로 전환하거나 종료합니다</div></div>
       <button class="danger-btn" onclick="doLogout()">로그아웃</button>
     </div>
   </div>
 </div>
 
+<!-- BOTTOM NAV -->
 <div class="bnav" id="bnav">
   <button class="bn" id="bn0" onclick="setNav(0);goScreen('dashboard')"><span class="bn-ico">🏠</span>홈</button>
   <button class="bn" id="bn1" onclick="setNav(1);goScreen('analysis')"><span class="bn-ico">🤖</span>AI진단</button>
@@ -585,589 +606,458 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
 </div>
 
 <script>
-let currentUser=null;
-function saveUsers(u){localStorage.setItem('pgpt_users',JSON.stringify(u))}
-function loadUsers(){try{return JSON.parse(localStorage.getItem('pgpt_users')||'{}')}catch(e){return{}}}
-function saveSession(u){localStorage.setItem('pgpt_session',JSON.stringify(u))}
-function loadSession(){try{return JSON.parse(localStorage.getItem('pgpt_session'))}catch(e){return null}}
-function clearSession(){localStorage.removeItem('pgpt_session')}
-window.onload=function(){calcTax();const s=loadSession();if(s){currentUser=s;afterLogin(false)}}
-function goScreen(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+n).classList.add('active');window.scrollTo(0,0)}
-function goHome(){if(currentUser){setNav(0);goScreen('dashboard')}else goScreen('landing')}
-function setNav(i){document.querySelectorAll('.bn').forEach((b,j)=>b.classList.toggle('active',j===i))}
-function switchAuthTab(t){
-  document.getElementById('form-login').style.display=t==='login'?'':'none';
-  document.getElementById('form-signup').style.display=t==='signup'?'':'none';
-  document.getElementById('tab-login').classList.toggle('active',t==='login');
-  document.getElementById('tab-signup').classList.toggle('active',t==='signup');
-}
-function doLogin(){
-  const email=document.getElementById('li-email').value.trim().toLowerCase();
-  const pw=document.getElementById('li-pw').value;
-  const err=document.getElementById('li-err');err.classList.remove('show');
-  if(!email||!pw){err.classList.add('show');return}
-  const users=loadUsers();const user=users[email];
-  if(!user||user.pw!==btoa(pw)){err.classList.add('show');return}
-  currentUser={...user};saveSession(currentUser);afterLogin(true)
-}
-function doSignup(){
-  const name=document.getElementById('su-name').value.trim();
-  const birth=document.getElementById('su-birth').value.trim();
-  const email=document.getElementById('su-email').value.trim().toLowerCase();
-  const pw=document.getElementById('su-pw').value;
-  const pw2=document.getElementById('su-pw2').value;
-  const err=document.getElementById('su-err');err.classList.remove('show');
-  if(!name||!email||!pw){err.textContent='모든 항목을 입력해주세요.';err.classList.add('show');return}
-  if(pw.length<6){err.textContent='비밀번호는 6자 이상이어야 합니다.';err.classList.add('show');return}
-  if(pw!==pw2){err.textContent='비밀번호가 일치하지 않습니다.';err.classList.add('show');return}
-  const users=loadUsers();
-  if(users[email]){err.textContent='이미 가입된 이메일입니다.';err.classList.add('show');return}
-  const u={name,birth,email,pw:btoa(pw),initial:name[0],pension:null,joinedAt:new Date().toLocaleDateString('ko-KR')};
-  users[email]=u;saveUsers(users);currentUser={...u};saveSession(currentUser);afterLogin(true)
-}
-function kakaoLogin(){
-  const name=prompt('카카오 간편가입\n이름을 입력하세요:')||'카카오사용자';
-  const email=name.replace(/\s/g,'').toLowerCase()+'@kakao.com';
-  const users=loadUsers();
-  if(!users[email])users[email]={name,email,pw:'',initial:name[0],pension:null,joinedAt:new Date().toLocaleDateString('ko-KR')};
-  saveUsers(users);currentUser={...users[email]};saveSession(currentUser);afterLogin(true)
-}
-function afterLogin(isNew){
-  document.getElementById('userChip').classList.add('show');
-  document.getElementById('uAvatar').textContent=currentUser.initial||currentUser.name[0];
-  document.getElementById('uName').textContent=currentUser.name+' 님';
-  document.getElementById('logoutBtn').classList.add('show');
-  document.getElementById('topCta').style.display='none';
-  document.getElementById('bnav').classList.add('show');
-  setNav(0);
-  if(!currentUser.pension){
-    goScreen('pension-input');piStep(1);
-  } else {
-    renderDashboard();goScreen('dashboard');
-  }
-}
-function doSignup(){ alert('새 가입은 메인 화면의 간편인증으로 해주세요.'); }
-function doLogout(){
-  clearSession();currentUser=null;
-  document.getElementById('userChip').classList.remove('show');
-  document.getElementById('logoutBtn').classList.remove('show');
-  document.getElementById('topCta').style.display='';
-  document.getElementById('bnav').classList.remove('show');
-  goScreen('landing')
-}
-function piStep(n){
-  [1,2,3].forEach(i=>{
-    document.getElementById('pi-step'+i).style.display=i===n?'':'none';
-    const el=document.getElementById('pis'+i);
-    el.className='pi-step'+(i<n?' done':i===n?' active':'');
-  })
-}
-function onDrag(e,o){e.preventDefault();document.getElementById('pdfZone').classList.toggle('drag',o)}
-function onDrop(e){e.preventDefault();document.getElementById('pdfZone').classList.remove('drag');if(e.dataTransfer.files[0])loadPdf(e.dataTransfer.files[0])}
-function onPdfFile(e){if(e.target.files[0])loadPdf(e.target.files[0])}
-function loadPdf(file){
-  document.getElementById('pdfOk').textContent='✓ '+file.name+' — 자동 분석 중...';
-  setTimeout(()=>{
-    document.getElementById('pi-months').value=150;document.getElementById('pi-paid').value=1424;
-    document.getElementById('pi-pension').value=62;document.getElementById('pi-unpaid').value=31.52;
-    document.getElementById('pdfOk').textContent='✓ PDF에서 데이터 추출 완료!';
-    document.getElementById('manualCard').style.display='';
-  },1200)
-}
-function finishInput(){
-  const p={
-    months:parseInt(document.getElementById('pi-months').value)||0,
-    paid:parseInt(document.getElementById('pi-paid').value)||0,
-    pension:parseInt(document.getElementById('pi-pension').value)||0,
-    unpaid:parseFloat(document.getElementById('pi-unpaid').value)||0,
-    retire:parseInt(document.getElementById('pi-retire').value)||0,
-    personal:parseInt(document.getElementById('pi-personal-amt').value)||0,
-    irp:parseInt(document.getElementById('pi-irp').value)||0,
-    extra:parseInt(document.getElementById('pi-extra').value)||30,
-    target:parseInt(document.getElementById('pi-target-range').value)||300,
-    retireAge:parseInt(document.getElementById('pi-retire-age').value)||65,
-    lifeAge:parseInt(document.getElementById('pi-life').value)||85,
-  };
-  if(!p.pension&&p.months>0)p.pension=Math.round(p.months*0.42);
-  currentUser.pension=p;
-  const users=loadUsers();if(users[currentUser.email])users[currentUser.email].pension=p;
-  saveUsers(users);saveSession(currentUser);goScreen('loading');runLoading()
-}
-function runLoading(){
-  const steps=['ls1','ls2','ls3','ls4'];
-  const msgs=['국민연금 데이터 분석 중...','퇴직·개인연금 계산 중...','시나리오 시뮬레이션 중...','Claude AI 진단 생성 중...'];
-  let i=0;
-  const t=setInterval(()=>{
-    if(i>0)document.getElementById(steps[i-1]).className='l-step done';
-    if(i<steps.length){document.getElementById(steps[i]).className='l-step active';document.getElementById('loadingMsg').textContent=msgs[i];}
-    i++;if(i>steps.length){clearInterval(t);setTimeout(()=>{renderDashboard();setNav(0);goScreen('dashboard')},500)}
-  },900)
-}
-function renderDashboard(){
-  const p=currentUser.pension;if(!p)return;
-  const u=currentUser;
-  const pct=Math.round(p.pension/p.target*100);
-  document.getElementById('dashGreet').textContent='안녕하세요, '+u.name+' 님 👋';
-  let meta='';if(u.birth&&u.birth.length>=4)meta=u.birth.slice(0,4)+'년생 · ';
-  meta+='납부 '+p.months+'개월 · 목표 '+p.retireAge+'세 은퇴';
-  document.getElementById('dashMeta').textContent=meta;
-  let alerts='';
-  if(p.unpaid>0)alerts+=`<div class="alert al-u"><div class="al-ico">🚨</div><div><div class="al-t">미납 보험료 ${p.unpaid}만원 — 즉시 납부 필요</div><div class="al-d">기한 초과 시 연체료 부과 및 가입 기간 손실이 발생합니다.</div><button class="al-btn">국민연금 앱에서 납부 →</button></div></div>`;
-  if(p.irp===0)alerts+=`<div class="alert al-i"><div class="al-ico">💡</div><div><div class="al-t">IRP 미가입 — 연 148만원 세액공제 놓치는 중</div><div class="al-d">지금 바로 가입하면 연말정산 최대 148만원 환급받을 수 있습니다.</div><button class="al-btn" onclick="setNav(2);goScreen('recommend')">상품 추천 보기</button></div></div>`;
-  document.getElementById('alertArea').innerHTML=alerts;
-  document.getElementById('kpi1').innerHTML=p.pension+'<small>만원</small>';document.getElementById('kpi1s').textContent='▲ 계속납부 시 더 증가';
-  document.getElementById('kpi2').innerHTML=p.paid.toLocaleString()+'<small>만원</small>';document.getElementById('kpi2s').textContent=p.months+'개월 납부';
-  document.getElementById('kpi3').innerHTML=pct+'<small>%</small>';document.getElementById('kpi3s').textContent='▼ 목표 '+p.target+'만원 대비';
-  document.getElementById('goalCur').textContent=p.pension+'만';document.getElementById('goalTgt').textContent=p.target+'만원 목표';
-  document.getElementById('goalPct').textContent='현재 '+pct+'% 달성 · IRP+연금저축 추가 시 최대 '+(Math.min(pct+40,95))+'% 가능';
-  setTimeout(()=>{document.getElementById('goalFill').style.width=Math.min(pct,100)+'%'},300);
-  document.getElementById('bv1').textContent=p.pension+'만/월';document.getElementById('bv2').textContent=p.retire>0?p.retire+'만원':'미가입';
-  document.getElementById('bv3').textContent=p.personal>0?p.personal+'만원':'미가입';document.getElementById('bv4').textContent=p.irp>0?p.irp+'만원':'미가입';
-  setTimeout(()=>{
-    document.getElementById('b1').style.width=Math.min(p.pension/Math.max(p.pension,1)*80,100)+'%';
-    document.getElementById('b2').style.width=p.retire>0?'60%':'0%';
-    document.getElementById('b3').style.width=p.personal>0?'40%':'0%';
-    document.getElementById('b4').style.width=p.irp>0?'30%':'0%';
-  },400);
-  document.getElementById('histTable').innerHTML=`<tr><td class="td-m">납부 기간</td><td>${p.months}개월 (${Math.floor(p.months/12)}년 ${p.months%12}개월)</td></tr><tr><td class="td-m">총 납부액</td><td>${p.paid.toLocaleString()}만원</td></tr><tr><td class="td-m">예상 수령액</td><td>${p.pension}만원/월</td></tr><tr><td class="td-m">목표 은퇴</td><td>${p.retireAge}세</td></tr><tr><td class="td-m">기대 수명</td><td>${p.lifeAge}세</td></tr>${p.unpaid>0?`<tr><td class="td-m" style="color:var(--red)">미납액</td><td style="color:var(--red)">${p.unpaid}만원</td></tr>`:''}`;
-  const sc65=p.pension,sc68=Math.round(p.pension*1.216),sc70=Math.round(p.pension*1.36);
-  const withIrp=Math.round(sc65+p.extra*0.6),best=Math.round(sc68+p.extra);
-  const mx=Math.max(best,1);
-  document.getElementById('scArea').innerHTML=`<div class="sc"><div class="sc-lbl">현재(65세)</div><div class="sc-track"><div class="sc-fill" style="width:${sc65/mx*100}%;background:var(--red)"></div></div><div class="sc-val" style="color:var(--red)">${sc65}만원</div></div><div class="sc"><div class="sc-lbl">68세 수령</div><div class="sc-track"><div class="sc-fill" style="width:${sc68/mx*100}%;background:#d97706"></div></div><div class="sc-val" style="color:#d97706">${sc68}만원</div></div><div class="sc"><div class="sc-lbl">70세 수령</div><div class="sc-track"><div class="sc-fill" style="width:${sc70/mx*100}%;background:var(--navy)"></div></div><div class="sc-val" style="color:var(--navy)">${sc70}만원</div></div><div class="sc"><div class="sc-lbl">+IRP 추가</div><div class="sc-track"><div class="sc-fill" style="width:${withIrp/mx*100}%;background:var(--green)"></div></div><div class="sc-val" style="color:var(--green)">${withIrp}만원</div></div><div class="sc"><div class="sc-lbl">최적 시나리오</div><div class="sc-track"><div class="sc-fill" style="width:${Math.min(best/mx*100,100)}%;background:var(--gold)"></div></div><div class="sc-val" style="color:var(--gold)">${best}만원</div></div>`;
-  renderAnalysis();renderMypage()
-}
-function renderAnalysis(){
-  const p=currentUser.pension;if(!p)return;
-  const pct=Math.round(p.pension/p.target*100);
-  document.getElementById('analysisArea').innerHTML=`
-  <div class="ab"><div class="ab-head"><span class="ab-icon">📊</span><span class="ab-title">현황 진단</span></div><div class="ab-body">납부 기간 <strong>${p.months}개월(${Math.floor(p.months/12)}년)</strong> 기준, 65세 예상 월 수령액은 <strong style="font-size:22px;color:var(--gold)">${p.pension}만원</strong>입니다. 목표 ${p.target}만원의 <strong style="color:var(--red)">${pct}%</strong>입니다.<div style="margin-top:8px"><span class="tag tag-r">달성률 ${pct}%</span>${p.irp===0?'<span class="tag tag-r">IRP 미가입</span>':'<span class="tag tag-g">IRP 가입중</span>'} ${p.personal===0?'<span class="tag tag-r">개인연금 미가입</span>':'<span class="tag tag-g">개인연금 가입중</span>'}</div></div></div>
-  <div class="ab"><div class="ab-head"><span class="ab-icon">🎯</span><span class="ab-title">핵심 과제</span></div><div class="ab-body"><div style="display:flex;flex-direction:column;gap:8px">${p.unpaid>0?`<div style="padding:11px;background:var(--red-bg);border-radius:8px"><div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:3px">🚨 즉시 — 미납 ${p.unpaid}만원 납부</div><div style="font-size:12px;color:var(--muted)">기한 내 납부하지 않으면 가입 기간 영구 손실.</div></div>`:''}<div style="padding:11px;background:var(--warn-bg);border-radius:8px"><div style="font-size:13px;font-weight:700;color:var(--warn);margin-bottom:3px">⚠️ ${p.irp===0?'IRP 즉시 가입':'연금 수익률 점검'}</div><div style="font-size:12px;color:var(--muted)">${p.irp===0?'월 '+p.extra+'만원 납입 시 '+p.retireAge+'세까지 약 '+Math.round(p.extra*12*(p.retireAge-50)*0.06/100)+'억 예상. 연 세액공제 최대 148만원.':'현재 적립액 기준 수익률과 목표 수익률을 비교해보세요.'}</div></div><div style="padding:11px;background:var(--blue-bg);border-radius:8px"><div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px">💡 연기연금 검토</div><div style="font-size:12px;color:var(--muted)">65세 대신 68세 수령 시 월 ${Math.round(p.pension*1.216)}만원으로 21.6% 증가.</div></div></div></div></div>
-  <div class="ab"><div class="ab-head"><span class="ab-icon">✅</span><span class="ab-title">지금 해야 할 행동</span></div><div class="ab-body"><div class="act-item"><div class="act-num" style="background:var(--red)">1</div><div><div class="act-t">${p.unpaid>0?'미납 보험료 납부':'납부 현황 확인'}</div><div class="act-s">국민연금 앱 → 납부/조회</div></div></div><div class="act-item"><div class="act-num" style="background:#d97706">2</div><div><div class="act-t">IRP 계좌 개설</div><div class="act-s">증권사 비대면 20분. 연 최대 148만원 절세</div></div></div><div class="act-item"><div class="act-num" style="background:var(--navy)">3</div><div><div class="act-t">연금저축펀드 개설 병행</div><div class="act-s">추가 세액공제 66만원. ETF 투자 가능</div></div></div></div></div>`
-}
-function renderMypage(){
-  const u=currentUser;const p=u.pension;
-  document.getElementById('myAvatarBig').textContent=u.initial||u.name[0];
-  document.getElementById('myName').textContent=u.name;
-  document.getElementById('myEmail').textContent=u.email||'';
-  document.getElementById('myJoined').textContent=u.joinedAt?'가입일: '+u.joinedAt:'';
-  if(p){
-    document.getElementById('mySummary').innerHTML=`<div class="my-row"><span class="my-row-lbl">납부 기간</span><span class="my-row-val">${p.months}개월</span></div><div class="my-row"><span class="my-row-lbl">예상 월 수령액</span><span class="my-row-val">${p.pension}만원</span></div><div class="my-row"><span class="my-row-lbl">총 납부액</span><span class="my-row-val">${p.paid.toLocaleString()}만원</span></div><div class="my-row"><span class="my-row-lbl">목표 달성률</span><span class="my-row-val">${Math.round(p.pension/p.target*100)}%</span></div>`;
-    document.getElementById('myTarget').textContent=p.target+'만원/월';
-    document.getElementById('myRetireAge').textContent=p.retireAge+'세';
-    document.getElementById('myLifeAge').textContent=p.lifeAge+'세';
-  }
-}
-/* ══════════════════════
-   CODEF API 연동
-   백엔드 서버 주소를 Railway 배포 후 변경하세요
-══════════════════════ */
+/* ═══════════════════════════
+   설정
+═══════════════════════════ */
 const BACKEND_URL = 'https://pensiongpt-backend-production.up.railway.app';
-let mainAuthLoginType = '5';
-let mainAuthTwoWayInfo = null;
-let mainAuthOriginalBody = null;
 
-function selectMainAuth(loginType, key) {
-  mainAuthLoginType = loginType;
-  // 버튼 스타일 초기화
-  ['mainAuthKakao','mainAuthNaver','mainAuthCert'].forEach(id => {
-    const btn = document.getElementById(id);
-    btn.style.borderColor = 'var(--cream2)';
-    btn.style.background = 'var(--white)';
-    btn.querySelectorAll('span').forEach(s => s.style.color = 'var(--muted)');
-  });
-  // 선택된 버튼 강조
-  if (key === 'kakao') {
-    const btn = document.getElementById('mainAuthKakao');
-    btn.style.borderColor = '#FEE500'; btn.style.background = '#FEE500';
-  } else {
-    const btn = document.getElementById('main-Auth'+key.charAt(0).toUpperCase()+key.slice(1));
-    if(btn){ btn.style.borderColor = 'var(--gold)'; btn.style.background = 'var(--cream)'; }
-  }
-  // 폼 표시 & 이름 자동 채우기
-  document.getElementById('mainAuthForm').style.display = 'block';
-  if (currentUser?.name) document.getElementById('ma-name').value = currentUser.name;
-  document.getElementById('mainAuthBtn').scrollIntoView({ behavior:'smooth', block:'nearest' });
+/* ═══════════════════════════
+   스토리지
+═══════════════════════════ */
+let currentUser = null;
+const saveUsers = u => localStorage.setItem('pgpt_users', JSON.stringify(u));
+const loadUsers = () => { try { return JSON.parse(localStorage.getItem('pgpt_users') || '{}'); } catch(e) { return {}; } };
+const saveSession = u => localStorage.setItem('pgpt_session', JSON.stringify(u));
+const loadSession = () => { try { return JSON.parse(localStorage.getItem('pgpt_session')); } catch(e) { return null; } };
+const clearSession = () => localStorage.removeItem('pgpt_session');
+
+/* ═══════════════════════════
+   초기화
+═══════════════════════════ */
+window.onload = () => {
+  calcTax();
+  const s = loadSession();
+  if (s) { currentUser = s; activateUser(false); }
+};
+
+/* ═══════════════════════════
+   화면 전환
+═══════════════════════════ */
+function goScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function goHome() {
+  if (currentUser) { setNav(0); goScreen('dashboard'); }
+  else goScreen('landing');
+}
+function setNav(i) {
+  document.querySelectorAll('.bn').forEach((b, j) => b.classList.toggle('active', j === i));
 }
 
-async function startMainAuth() {
-  const name     = document.getElementById('ma-name').value.trim();
-  const birth    = document.getElementById('ma-birth').value.trim();
-  const identity = document.getElementById('ma-identity').value.trim().replace(/-/g,'');
+/* ═══════════════════════════
+   인증 — CODEF 금융감독원 연동
+═══════════════════════════ */
+let authLoginType = '5';
+let authTwoWayInfo = null;
+let authOriginalBody = null;
 
+function selectAuth(loginType, key) {
+  authLoginType = loginType;
+  document.querySelectorAll('.auth-method-btn').forEach(b => {
+    b.style.borderColor = 'var(--cream2)';
+    b.style.background = b.id === 'btn-kakao' ? '#FEE500' : 'var(--white)';
+  });
+  const btn = document.getElementById('btn-' + key);
+  if (btn) { btn.style.borderColor = 'var(--gold)'; btn.style.background = key === 'kakao' ? '#FDD800' : 'var(--cream)'; }
+  document.getElementById('authForm').style.display = 'block';
+  if (currentUser?.name) document.getElementById('a-name').value = currentUser.name;
+}
+
+async function startAuth() {
+  const name     = document.getElementById('a-name').value.trim();
+  const birth    = document.getElementById('a-birth').value.trim();
+  const identity = document.getElementById('a-identity').value.trim().replace(/-/g, '');
   if (!name) { alert('이름을 입력해주세요.'); return; }
-  if (!identity || identity.length !== 13) { alert('주민등록번호 13자리를 입력해주세요.\n예: 7712051234567'); return; }
+  if (identity.length !== 13) { alert('주민등록번호 13자리를 입력해주세요.\n예: 7712051234567'); return; }
 
-  const btn = document.getElementById('mainAuthBtn');
-  btn.disabled = true; btn.textContent = '금융감독원 접속 중...';
-  document.getElementById('mainAuthStatus').style.display = 'block';
-  document.getElementById('mainTwoWay').style.display = 'none';
-  setMainStatus('금융감독원 통합연금포털 접속 중...', false);
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true; btn.textContent = '조회 중...';
+  document.getElementById('authStatus').style.display = 'block';
+  document.getElementById('twoWayBox').style.display = 'none';
+  setAuthStatus('금융감독원 통합연금포털 접속 중...', 'info');
 
-  mainAuthOriginalBody = { userName: name, identity, loginType: mainAuthLoginType };
+  authOriginalBody = { userName: name, identity, loginType: authLoginType };
 
   try {
     const res = await fetch(`${BACKEND_URL}/api/pension/my-pension`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(mainAuthOriginalBody)
+      body: JSON.stringify(authOriginalBody)
     });
+    if (!res.ok) throw new Error('서버 오류 ' + res.status);
     const data = await res.json();
     if (data.error) throw new Error(JSON.stringify(data.error));
 
     // 2차 인증 필요
     if (data.result?.code === 'CF-03002' || data.data?.jobIndex !== undefined) {
-      mainAuthTwoWayInfo = data.data;
-      setMainStatus('📱 카카오톡/PASS 앱에서 인증을 승인해주세요!', false);
-      document.getElementById('mainTwoWay').style.display = 'block';
+      authTwoWayInfo = data.data;
+      setAuthStatus('📱 카카오톡/PASS 앱에서 인증을 승인해주세요!', 'warn');
+      document.getElementById('twoWayBox').style.display = 'block';
+      btn.disabled = false; btn.textContent = '금융감독원에서 내 연금 조회하기 →';
       return;
     }
-    handleMainAuthSuccess(data, name, birth);
+    onAuthSuccess(data, name, birth);
   } catch(err) {
-    if (err.message.includes('fetch') || err.message.includes('Failed') || err.message.includes('NetworkError')) {
-      // 백엔드 연결 실패 시 데모 모드
-      handleMainAuthDemo(name, birth);
+    // 서버 연결 실패 → 데모 모드
+    if (err.message.includes('fetch') || err.message.includes('Failed') || err.message.includes('서버 오류')) {
+      setAuthStatus('⚠️ 서버 연결 실패 — 데모 데이터로 진행합니다', 'warn');
+      setTimeout(() => onAuthDemo(name, birth), 800);
     } else {
-      setMainStatus('❌ 조회 실패: ' + err.message, true);
+      setAuthStatus('❌ 조회 실패: ' + err.message, 'error');
       btn.disabled = false; btn.textContent = '금융감독원에서 내 연금 조회하기 →';
     }
   }
 }
 
-async function completeMainTwoWay() {
-  setMainStatus('인증 결과 확인 중...', false);
-  document.getElementById('mainTwoWay').style.display = 'none';
-  const name  = document.getElementById('ma-name').value.trim();
-  const birth = document.getElementById('ma-birth').value.trim();
+async function completeTwoWay() {
+  setAuthStatus('인증 결과 확인 중...', 'info');
+  document.getElementById('twoWayBox').style.display = 'none';
+  const name  = document.getElementById('a-name').value.trim();
+  const birth = document.getElementById('a-birth').value.trim();
   try {
     const res = await fetch(`${BACKEND_URL}/api/pension/two-way`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        endpoint: '/v1/kr/public/fs/pension/my-pension',
-        twoWayInfo: mainAuthTwoWayInfo,
-        originalBody: mainAuthOriginalBody
-      })
+      body: JSON.stringify({ endpoint: '/v1/kr/public/fs/pension/my-pension', twoWayInfo: authTwoWayInfo, originalBody: authOriginalBody })
     });
     const data = await res.json();
     if (data.error) throw new Error(JSON.stringify(data.error));
-    handleMainAuthSuccess(data, name, birth);
+    onAuthSuccess(data, name, birth);
   } catch(err) {
-    setMainStatus('❌ 인증 확인 실패: ' + err.message, true);
+    setAuthStatus('❌ 인증 확인 실패: ' + err.message, 'error');
   }
 }
 
-function handleMainAuthSuccess(data, name, birth) {
-  // CODEF 응답 파싱
+function onAuthSuccess(data, name, birth) {
   const list = data.data?.resList || data.data || [];
-  let retire = 0, personal = 0, irp = 0, nps = 0;
-
+  let retire = 0, personal = 0, irp = 0;
   list.forEach(item => {
-    const amt  = Math.round((parseInt(item.reserveAmt || item.balance || item.pensionBalance || 0)) / 10000);
+    const amt  = Math.round(parseInt(item.reserveAmt || item.balance || item.pensionBalance || 0) / 10000);
     const type = (item.pensionType || item.productType || '').toString();
-    if (type === '1' || type.includes('개인') || type.includes('저축')) personal += amt;
-    else if (type === '2' || type.toUpperCase().includes('IRP')) irp += amt;
+    if (type === '2' || type.toUpperCase().includes('IRP')) irp += amt;
     else if (type === '3' || type === '4' || type.includes('퇴직')) retire += amt;
     else personal += amt;
   });
-
-  setMainStatus('✅ 연금 정보 조회 완료!', false);
-  finishMainAuth(name, birth, { retire, personal, irp, nps });
+  setAuthStatus('✅ 금융감독원 연금 정보 조회 완료!', 'success');
+  createAndLogin(name, birth, { retire, personal, irp });
 }
 
-function handleMainAuthDemo(name, birth) {
-  // 백엔드 미연결 시 데모 데이터
-  setMainStatus('⚠️ 데모 모드 — 샘플 데이터로 진행합니다', false);
+function onAuthDemo(name, birth) {
+  // 데모: 샘플 데이터
+  createAndLogin(name, birth, { retire: 4820, personal: 1240, irp: 0 });
+}
+
+function setAuthStatus(msg, type) {
+  const box = document.getElementById('authStatusBox');
+  box.className = 'status-box ' + type;
+  const spin = type === 'info' ? '<div class="spin"></div>' : '';
+  box.innerHTML = spin + '<span>' + msg + '</span>';
+}
+
+/* ═══════════════════════════
+   이메일 로그인 (재방문자)
+═══════════════════════════ */
+function toggleEmailLogin() {
+  const box = document.getElementById('emailLoginBox');
+  box.style.display = box.style.display === 'none' ? '' : 'none';
+}
+
+function doEmailLogin() {
+  const email = document.getElementById('li-email').value.trim().toLowerCase();
+  const pw    = document.getElementById('li-pw').value;
+  const err   = document.getElementById('li-err');
+  err.classList.remove('show');
+  if (!email || !pw) { err.classList.add('show'); return; }
+  const users = loadUsers();
+  const user  = users[email];
+  if (!user || (user.pw && user.pw !== btoa(pw))) { err.classList.add('show'); return; }
+  currentUser = { ...user };
+  saveSession(currentUser);
+  activateUser(true);
+}
+
+/* ═══════════════════════════
+   PDF / 직접입력 대안
+═══════════════════════════ */
+function goAltMethod(type) {
+  const name  = document.getElementById('a-name').value.trim() || '사용자';
+  const birth = document.getElementById('a-birth').value.trim();
+  createAndLogin(name, birth, { retire: 0, personal: 0, irp: 0 }, false);
   setTimeout(() => {
-    finishMainAuth(name, birth, { retire: 4820, personal: 1240, irp: 0, nps: 0 });
-  }, 800);
+    goScreen('pension-input'); piStep(1);
+    if (type === 'manual') document.getElementById('manualCard').style.display = '';
+  }, 100);
 }
 
-function finishMainAuth(name, birth, pensionData) {
-  // 사용자 계정 자동 생성 또는 로드 (이름+생년월일 기반)
-  const key   = (name + (birth || '')).replace(/\s/g,'').toLowerCase();
+/* ═══════════════════════════
+   계정 생성/로그인 공통
+═══════════════════════════ */
+function createAndLogin(name, birth, pensionData, goPensionInput = true) {
+  const key   = (name + (birth || '')).replace(/\s/g, '').toLowerCase();
   const email = key + '@pensiongpt.local';
   const users = loadUsers();
   if (!users[email]) {
-    users[email] = {
-      name, birth, email, pw: '', initial: name[0],
-      pension: null, joinedAt: new Date().toLocaleDateString('ko-KR')
-    };
-    saveUsers(users);
+    users[email] = { name, birth, email, pw: '', initial: name[0], pension: null, joinedAt: new Date().toLocaleDateString('ko-KR') };
   }
-  currentUser = { ...users[email] };
-
-  // 연금 데이터 병합 (국민연금은 나중에 PDF/직접입력으로 추가)
-  if (!currentUser.pension) {
-    currentUser.pension = {
-      months: 0, paid: 0, pension: 0, unpaid: 0,
-      retire: pensionData.retire,
-      personal: pensionData.personal,
-      irp: pensionData.irp,
-      extra: 30, target: 300, retireAge: 65, lifeAge: 85
-    };
+  // 금감원 데이터 병합
+  if (!users[email].pension) {
+    users[email].pension = { months: 0, paid: 0, pension: 0, unpaid: 0, ...pensionData, extra: 30, target: 300, retireAge: 65, lifeAge: 85 };
   } else {
-    currentUser.pension.retire   = pensionData.retire;
-    currentUser.pension.personal = pensionData.personal;
-    currentUser.pension.irp      = pensionData.irp;
+    users[email].pension = { ...users[email].pension, ...pensionData };
   }
-
-  // 저장
-  const users2 = loadUsers();
-  users2[email] = { ...currentUser };
-  saveUsers(users2);
-  saveSession(currentUser);
-
-  // UI 업데이트
-  document.getElementById('userChip').classList.add('show');
-  document.getElementById('uAvatar').textContent = currentUser.initial || name[0];
-  document.getElementById('uName').textContent = name + ' 님';
-  document.getElementById('logoutBtn').classList.add('show');
-  document.getElementById('topCta').style.display = 'none';
-  document.getElementById('bnav').classList.add('show');
-
-  // 국민연금 정보가 없으면 → PDF/직접입력 화면으로
-  if (!currentUser.pension.months) {
-    goScreen('pension-input');
-    piStep(1);
-    // 이미 조회된 개인연금 데이터 입력란에 자동 채우기
-    setTimeout(() => {
-      document.getElementById('pi-retire').value      = pensionData.retire;
-      document.getElementById('pi-personal-amt').value = pensionData.personal;
-      document.getElementById('pi-irp').value          = pensionData.irp;
-      document.getElementById('autoFillBadge').textContent = '✅ 금융감독원 자동 입력됨';
-    }, 300);
-  } else {
-    // 국민연금도 있으면 바로 로딩 → 대시보드
-    goScreen('loading');
-    runLoading();
-  }
-}
-
-function setMainStatus(msg, isError) {
-  const txt = document.getElementById('mainStatusTxt');
-  const box = document.getElementById('mainStatusMsg');
-  txt.textContent = msg;
-  box.style.background = isError ? 'var(--red-bg)' : 'var(--blue-bg)';
-  box.style.color = isError ? 'var(--red)' : 'var(--blue)';
-}
-
-function goAltMethod(type) {
-  // PDF 또는 직접입력으로 이동
-  const name = document.getElementById('ma-name').value.trim() || '사용자';
-  const birth = document.getElementById('ma-birth').value.trim();
-  const email = (name+birth).replace(/\s/g,'').toLowerCase() + '@pensiongpt.local';
-  const users = loadUsers();
-  if (!users[email]) {
-    users[email] = { name, birth, email, pw:'', initial:name[0], pension:null, joinedAt:new Date().toLocaleDateString('ko-KR') };
-    saveUsers(users);
-  }
+  saveUsers(users);
   currentUser = { ...users[email] };
   saveSession(currentUser);
+  activateUser(true, pensionData, goPensionInput);
+}
+
+function activateUser(isNew, pensionData = null, goPensionInput = true) {
+  // 상단 UI
   document.getElementById('userChip').classList.add('show');
-  document.getElementById('uAvatar').textContent = name[0];
-  document.getElementById('uName').textContent = name + ' 님';
+  document.getElementById('uAvatar').textContent = currentUser.initial || currentUser.name[0];
+  document.getElementById('uName').textContent   = currentUser.name + ' 님';
   document.getElementById('logoutBtn').classList.add('show');
   document.getElementById('topCta').style.display = 'none';
   document.getElementById('bnav').classList.add('show');
   setNav(0);
-  goScreen('pension-input');
-  piStep(1);
-  if (type === 'manual') {
-    setTimeout(() => { document.getElementById('manualCard').style.display = ''; }, 200);
-  }
-}
 
-function showEmailLogin() {
-  const area = document.getElementById('emailLoginArea');
-  area.style.display = area.style.display === 'none' ? '' : 'none';
-}
-
-function switchAuthTab(){} // 더 이상 사용 안 함
-
-function kakaoLogin() { selectMainAuth('5','kakao'); }
-
-
-
-// ── 구버전 호환용 빈 함수 (제거 예정) ──
-function selectCodefAuth() {}
-function startCodefQuery() {}
-function submitTwoWay() {}
-function handleCodefSuccess() {}
-function showCodefDemo() {}
-function setCodefStatus() {}
-function _unused_selectCodefAuth_old(loginType, label) {
-  const _codefLoginType = loginType;
-  document.querySelectorAll('.codef-auth-btn').forEach(btn => {
-    btn.style.borderColor = 'var(--cream2)';
-    btn.style.background = 'var(--white)';
-  });
-  event.currentTarget.style.borderColor = 'var(--gold)';
-  event.currentTarget.style.background = 'var(--cream)';
-  // 폼 표시 (이름 자동 채우기)
-  document.getElementById('codefForm').style.display = 'block';
-  if (currentUser?.name) document.getElementById('cf-name').value = currentUser.name;
-}
-
-async function startCodefQuery() {
-  const name = document.getElementById('cf-name').value.trim();
-  const identity = document.getElementById('cf-identity').value.trim().replace(/-/g,'');
-  if (!name || !identity) { alert('이름과 주민등록번호를 모두 입력해주세요.'); return; }
-  if (identity.length !== 13) { alert('주민등록번호 13자리를 입력해주세요. (예: 7712051234567)'); return; }
-
-  const btn = document.getElementById('codefQueryBtn');
-  btn.disabled = true; btn.textContent = '조회 중...';
-  document.getElementById('codefStatus').style.display = 'block';
-  document.getElementById('codefStatusMsg').style.display = 'flex';
-  document.getElementById('twoWayArea').style.display = 'none';
-  document.getElementById('codefResult').style.display = 'none';
-  setCodefStatus('금융감독원 통합연금포털 접속 중...', false);
-
-  codefOriginalBody = { userName: name, identity, loginType: codefLoginType };
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/pension/my-pension`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(codefOriginalBody)
-    });
-    const data = await res.json();
-
-    if (data.error) throw new Error(JSON.stringify(data.error));
-
-    // 2차 인증 필요 (간편인증)
-    if (data.result?.code === 'CF-03002' || data.data?.jobIndex !== undefined) {
-      codefTwoWayInfo = data.data;
-      setCodefStatus('📱 카카오/PASS 앱에서 인증을 승인해주세요!', false);
-      document.getElementById('twoWayArea').style.display = 'block';
-      return;
+  if (!currentUser.pension || !currentUser.pension.months) {
+    // 국민연금 정보 없음 → 입력 화면
+    goScreen('pension-input'); piStep(1);
+    // 금감원 데이터 자동 채우기
+    if (pensionData) {
+      setTimeout(() => {
+        document.getElementById('pi-retire').value      = pensionData.retire || 0;
+        document.getElementById('pi-personal-amt').value = pensionData.personal || 0;
+        document.getElementById('pi-irp').value          = pensionData.irp || 0;
+        const hasData = (pensionData.retire + pensionData.personal + pensionData.irp) > 0;
+        if (hasData) {
+          document.getElementById('autoFilledCard').style.display = '';
+          document.getElementById('autoFillBadge').textContent    = '✅ 금융감독원 자동 입력됨';
+        }
+      }, 200);
     }
-
-    // 바로 성공
-    handleCodefSuccess(data);
-  } catch(err) {
-    // 백엔드 미설정 시 — 데모 모드로 전환
-    if (err.message.includes('fetch') || err.message.includes('Failed')) {
-      showCodefDemo();
-    } else {
-      setCodefStatus('❌ 조회 실패: ' + err.message, true);
-      btn.disabled = false; btn.textContent = '금융감독원에서 연금 자동 조회 →';
-    }
-  }
-}
-
-async function submitTwoWay() {
-  setCodefStatus('인증 결과 확인 중...', false);
-  document.getElementById('twoWayArea').style.display = 'none';
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/pension/two-way`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        endpoint: '/v1/kr/public/fs/pension/my-pension',
-        twoWayInfo: codefTwoWayInfo,
-        originalBody: codefOriginalBody
-      })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(JSON.stringify(data.error));
-    handleCodefSuccess(data);
-  } catch(err) {
-    setCodefStatus('❌ 인증 확인 실패: ' + err.message, true);
-  }
-}
-
-function handleCodefSuccess(data) {
-  // CODEF 응답 파싱 — 실제 응답 구조에 따라 조정
-  const list = data.data?.resList || data.data || [];
-  let retire = 0, personal = 0, irp = 0;
-  const items = [];
-
-  list.forEach(item => {
-    const amt = Math.round((parseInt(item.reserveAmt || item.balance || item.pensionBalance || 0)) / 10000);
-    const type = item.pensionType || item.productType || '';
-    const name = item.productName || item.pensionName || item.companyName || '연금 상품';
-    const company = item.companyName || item.insureNm || '';
-    const monthly = Math.round(parseInt(item.pensionAmt || item.monthlyPension || 0) / 10000);
-
-    if (type === '1' || type.includes('개인') || type.includes('저축')) {
-      personal += amt; items.push({ label:'개인연금', name, company, amt, monthly });
-    } else if (type === '2' || type.toUpperCase().includes('IRP')) {
-      irp += amt; items.push({ label:'IRP', name, company, amt, monthly });
-    } else if (type === '3' || type === '4' || type.includes('퇴직')) {
-      retire += amt; items.push({ label:'퇴직연금', name, company, amt, monthly });
-    } else {
-      personal += amt; items.push({ label:'연금', name, company, amt, monthly });
-    }
-  });
-
-  // 입력란 자동 채우기
-  document.getElementById('pi-retire').value = retire;
-  document.getElementById('pi-personal-amt').value = personal;
-  document.getElementById('pi-irp').value = irp;
-  document.getElementById('autoFillBadge').textContent = '✅ 자동 입력됨';
-
-  // 결과 표시
-  setCodefStatus('', false);
-  document.getElementById('codefStatusMsg').style.display = 'none';
-  document.getElementById('codefResult').style.display = 'block';
-
-  if (items.length > 0) {
-    document.getElementById('codefResultItems').innerHTML = items.map(item => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--cream2);border-radius:8px;font-size:13px">
-        <div>
-          <span style="font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;background:var(--blue-bg);color:var(--blue);margin-right:6px">${item.label}</span>
-          <span style="font-weight:600">${item.name}</span>
-          ${item.company ? `<span style="color:var(--muted);font-size:12px"> · ${item.company}</span>` : ''}
-        </div>
-        <div style="font-weight:700;color:var(--navy)">${item.amt.toLocaleString()}만원</div>
-      </div>`).join('');
   } else {
-    document.getElementById('codefResultItems').innerHTML = '<div style="font-size:13px;color:var(--muted);text-align:center;padding:12px">조회된 개인연금·IRP 상품이 없습니다.</div>';
+    // 국민연금 있음 → 로딩 → 대시보드
+    goScreen('loading'); runLoading();
   }
-
-  const btn = document.getElementById('codefQueryBtn');
-  btn.disabled = false; btn.textContent = '✅ 조회 완료 — 다시 조회하려면 클릭';
 }
 
-// 백엔드 미설정 시 데모 모드
-function showCodefDemo() {
-  // 데모용 샘플 데이터로 자동 입력
-  document.getElementById('pi-retire').value = 4820;
-  document.getElementById('pi-personal-amt').value = 1240;
-  document.getElementById('pi-irp').value = 0;
-  document.getElementById('autoFillBadge').textContent = '🔔 데모 데이터 (백엔드 연결 후 실제 데이터 조회)';
-
-  document.getElementById('codefStatusMsg').style.display = 'none';
-  document.getElementById('codefResult').style.display = 'block';
-  document.getElementById('codefResultItems').innerHTML = `
-    <div style="padding:12px;background:var(--warn-bg);border:1px solid #fde68a;border-radius:8px;font-size:12px;color:var(--warn);line-height:1.6">
-      ⚠️ <strong>백엔드 서버가 연결되지 않았습니다.</strong><br>
-      Railway에 서버를 배포하고 BACKEND_URL을 설정하면 실제 금융감독원 데이터를 조회합니다.<br>
-      지금은 샘플 데이터로 진행합니다.
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--cream2);border-radius:8px;font-size:13px;margin-top:6px">
-      <div><span style="font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;background:var(--blue-bg);color:var(--blue);margin-right:6px">퇴직연금</span><span style="font-weight:600">[데모] 퇴직연금 DC형</span></div>
-      <div style="font-weight:700;color:var(--navy)">4,820만원</div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--cream2);border-radius:8px;font-size:13px;margin-top:6px">
-      <div><span style="font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;background:var(--blue-bg);color:var(--blue);margin-right:6px">개인연금</span><span style="font-weight:600">[데모] 연금저축펀드</span></div>
-      <div style="font-weight:700;color:var(--navy)">1,240만원</div>
-    </div>`;
-
-  const btn = document.getElementById('codefQueryBtn');
-  btn.disabled = false; btn.textContent = '금융감독원에서 연금 자동 조회 →';
+function doLogout() {
+  clearSession(); currentUser = null;
+  document.getElementById('userChip').classList.remove('show');
+  document.getElementById('logoutBtn').classList.remove('show');
+  document.getElementById('topCta').style.display = '';
+  document.getElementById('bnav').classList.remove('show');
+  goScreen('landing');
 }
 
-// ── (구버전 함수 끝) ──
+/* ═══════════════════════════
+   PDF 처리
+═══════════════════════════ */
+function onDrag(e, o) { e.preventDefault(); document.getElementById('pdfZone').classList.toggle('drag', o); }
+function onDrop(e)    { e.preventDefault(); document.getElementById('pdfZone').classList.remove('drag'); if (e.dataTransfer.files[0]) loadPdf(e.dataTransfer.files[0]); }
+function onPdfFile(e) { if (e.target.files[0]) loadPdf(e.target.files[0]); }
+function loadPdf(file) {
+  document.getElementById('pdfOk').textContent = '✓ ' + file.name + ' — 분석 중...';
+  // 실제: Claude API로 PDF 파싱. 여기선 데모값
+  setTimeout(() => {
+    document.getElementById('pi-months').value  = 150;
+    document.getElementById('pi-paid').value    = 1424;
+    document.getElementById('pi-pension').value = 62;
+    document.getElementById('pi-unpaid').value  = 31.52;
+    document.getElementById('pdfOk').textContent = '✓ PDF 데이터 추출 완료!';
+    document.getElementById('manualCard').style.display = '';
+  }, 1200);
+}
 
-function calcTax(){
-  const irp=parseInt(document.getElementById('irpAmt').value);
-  const sav=parseInt(document.getElementById('savingAmt').value);
-  document.getElementById('irpAmtVal').textContent=Math.round(irp/10000)+'만원';
-  document.getElementById('savingAmtVal').textContent=Math.round(sav/10000)+'만원';
-  const base=Math.min(irp+sav,9000000);
-  document.getElementById('taxTotal').textContent=Math.round((irp+sav)/10000)+'만원';
-  document.getElementById('taxRefund').textContent=Math.round(base*0.165/10000)+'만원';
+/* ═══════════════════════════
+   연금 정보 입력 단계
+═══════════════════════════ */
+function piStep(n) {
+  [1, 2, 3].forEach(i => {
+    document.getElementById('pi-step' + i).style.display = i === n ? '' : 'none';
+    const el = document.getElementById('pis' + i);
+    el.className = 'pi-step' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
+}
+
+function finishInput() {
+  const p = {
+    months:   parseInt(document.getElementById('pi-months').value)       || 0,
+    paid:     parseInt(document.getElementById('pi-paid').value)         || 0,
+    pension:  parseInt(document.getElementById('pi-pension').value)      || 0,
+    unpaid:   parseFloat(document.getElementById('pi-unpaid').value)     || 0,
+    retire:   parseInt(document.getElementById('pi-retire').value)       || 0,
+    personal: parseInt(document.getElementById('pi-personal-amt').value) || 0,
+    irp:      parseInt(document.getElementById('pi-irp').value)          || 0,
+    extra:    parseInt(document.getElementById('pi-extra').value)        || 30,
+    target:   parseInt(document.getElementById('pi-target-range').value) || 300,
+    retireAge: parseInt(document.getElementById('pi-retire-age').value)  || 65,
+    lifeAge:   parseInt(document.getElementById('pi-life').value)        || 85,
+  };
+  if (!p.pension && p.months > 0) p.pension = Math.round(p.months * 0.42);
+  currentUser.pension = p;
+  const users = loadUsers();
+  if (users[currentUser.email]) users[currentUser.email].pension = p;
+  saveUsers(users); saveSession(currentUser);
+  goScreen('loading'); runLoading();
+}
+
+/* ═══════════════════════════
+   로딩 애니메이션
+═══════════════════════════ */
+function runLoading() {
+  const steps = ['ls1','ls2','ls3','ls4'];
+  const msgs  = ['국민연금 데이터 분석 중...','퇴직·개인연금 계산 중...','시나리오 시뮬레이션 중...','Claude AI 진단 생성 중...'];
+  let i = 0;
+  const t = setInterval(() => {
+    if (i > 0) document.getElementById(steps[i-1]).className = 'l-step done';
+    if (i < steps.length) { document.getElementById(steps[i]).className = 'l-step active'; document.getElementById('loadingMsg').textContent = msgs[i]; }
+    i++;
+    if (i > steps.length) { clearInterval(t); setTimeout(() => { renderDashboard(); setNav(0); goScreen('dashboard'); }, 500); }
+  }, 900);
+}
+
+/* ═══════════════════════════
+   대시보드 렌더링
+═══════════════════════════ */
+function renderDashboard() {
+  const p = currentUser.pension; if (!p) return;
+  const u = currentUser;
+  const pct = Math.round(p.pension / p.target * 100);
+
+  document.getElementById('dashGreet').textContent = '안녕하세요, ' + u.name + ' 님 👋';
+  let meta = '';
+  if (u.birth && u.birth.length >= 4) meta = u.birth.slice(0, 4) + '년생 · ';
+  meta += '납부 ' + p.months + '개월 · 목표 ' + p.retireAge + '세 은퇴';
+  document.getElementById('dashMeta').textContent = meta;
+
+  // 알림
+  let alerts = '';
+  if (p.unpaid > 0) alerts += `<div class="alert al-u"><div class="al-ico">🚨</div><div><div class="al-t">미납 보험료 ${p.unpaid}만원 — 즉시 납부 필요</div><div class="al-d">기한 초과 시 연체료 부과 및 가입 기간 손실이 발생합니다.</div><button class="al-btn" onclick="alert('국민연금 앱에서 납부하세요')">납부하기 →</button></div></div>`;
+  if (p.irp === 0) alerts += `<div class="alert al-i"><div class="al-ico">💡</div><div><div class="al-t">IRP 미가입 — 연 148만원 세액공제 놓치는 중</div><div class="al-d">지금 바로 가입하면 연말정산 최대 148만원 환급받을 수 있습니다.</div><button class="al-btn" onclick="setNav(2);goScreen('recommend')">상품 추천 보기</button></div></div>`;
+  if (p.personal === 0 && p.irp === 0) alerts += `<div class="alert al-w"><div class="al-ico">⚠️</div><div><div class="al-t">개인연금 미가입 — 노후 준비 부족</div><div class="al-d">국민연금만으로는 목표 ${p.target}만원의 ${pct}%만 충당됩니다. 개인연금 추가를 권장합니다.</div></div></div>`;
+  document.getElementById('alertArea').innerHTML = alerts;
+
+  // KPI
+  document.getElementById('kpi1').innerHTML = p.pension + '<small>만원</small>';
+  document.getElementById('kpi1s').textContent = '▲ 계속납부 시 더 증가';
+  document.getElementById('kpi2').innerHTML = p.paid.toLocaleString() + '<small>만원</small>';
+  document.getElementById('kpi2s').textContent = p.months + '개월 납부';
+  document.getElementById('kpi3').innerHTML = pct + '<small>%</small>';
+  document.getElementById('kpi3s').textContent = '▼ 목표 ' + p.target + '만원 대비';
+
+  // 목표 바
+  document.getElementById('goalCur').textContent = p.pension + '만';
+  document.getElementById('goalTgt').textContent = p.target + '만원 목표';
+  document.getElementById('goalPct').textContent = '현재 ' + pct + '% 달성 · IRP+연금저축 추가 시 최대 ' + Math.min(pct + 40, 95) + '% 가능';
+  setTimeout(() => document.getElementById('goalFill').style.width = Math.min(pct, 100) + '%', 300);
+
+  // 연금 구성 바
+  const maxVal = Math.max(p.pension, 1);
+  document.getElementById('bv1').textContent = p.pension + '만/월';
+  document.getElementById('bv2').textContent = p.retire   > 0 ? p.retire.toLocaleString()   + '만원' : '미가입';
+  document.getElementById('bv3').textContent = p.personal > 0 ? p.personal.toLocaleString() + '만원' : '미가입';
+  document.getElementById('bv4').textContent = p.irp      > 0 ? p.irp.toLocaleString()      + '만원' : '미가입';
+  setTimeout(() => {
+    document.getElementById('b1').style.width = Math.min(p.pension / maxVal * 80, 100) + '%';
+    document.getElementById('b2').style.width = p.retire   > 0 ? '65%' : '0%';
+    document.getElementById('b3').style.width = p.personal > 0 ? '45%' : '0%';
+    document.getElementById('b4').style.width = p.irp      > 0 ? '35%' : '0%';
+  }, 400);
+
+  // 납부 이력
+  document.getElementById('histTable').innerHTML = `
+    <tr><td class="td-m">납부 기간</td><td>${p.months}개월 (${Math.floor(p.months/12)}년 ${p.months%12}개월)</td></tr>
+    <tr><td class="td-m">총 납부액</td><td>${p.paid.toLocaleString()}만원</td></tr>
+    <tr><td class="td-m">예상 수령액</td><td>${p.pension}만원/월</td></tr>
+    <tr><td class="td-m">퇴직연금</td><td>${p.retire > 0 ? p.retire.toLocaleString() + '만원' : '미가입'}</td></tr>
+    <tr><td class="td-m">개인연금</td><td>${p.personal > 0 ? p.personal.toLocaleString() + '만원' : '미가입'}</td></tr>
+    <tr><td class="td-m">IRP</td><td>${p.irp > 0 ? p.irp.toLocaleString() + '만원' : '미가입'}</td></tr>
+    ${p.unpaid > 0 ? `<tr><td class="td-m" style="color:var(--red)">미납액</td><td style="color:var(--red)">${p.unpaid}만원</td></tr>` : ''}`;
+
+  // 시나리오
+  const sc65 = p.pension, sc68 = Math.round(p.pension * 1.216), sc70 = Math.round(p.pension * 1.36);
+  const withIrp = Math.round(sc65 + p.extra * 0.6), best = Math.round(sc68 + p.extra);
+  const mx = Math.max(best, 1);
+  document.getElementById('scArea').innerHTML = `
+    <div class="sc"><div class="sc-lbl">현재(65세)</div><div class="sc-track"><div class="sc-fill" style="width:${sc65/mx*100}%;background:var(--red)"></div></div><div class="sc-val" style="color:var(--red)">${sc65}만원</div></div>
+    <div class="sc"><div class="sc-lbl">68세 수령</div><div class="sc-track"><div class="sc-fill" style="width:${sc68/mx*100}%;background:#d97706"></div></div><div class="sc-val" style="color:#d97706">${sc68}만원</div></div>
+    <div class="sc"><div class="sc-lbl">70세 수령</div><div class="sc-track"><div class="sc-fill" style="width:${sc70/mx*100}%;background:var(--navy)"></div></div><div class="sc-val" style="color:var(--navy)">${sc70}만원</div></div>
+    <div class="sc"><div class="sc-lbl">+IRP 추가</div><div class="sc-track"><div class="sc-fill" style="width:${Math.min(withIrp/mx*100,100)}%;background:var(--green)"></div></div><div class="sc-val" style="color:var(--green)">${withIrp}만원</div></div>
+    <div class="sc"><div class="sc-lbl">최적 시나리오</div><div class="sc-track"><div class="sc-fill" style="width:${Math.min(best/mx*100,100)}%;background:var(--gold)"></div></div><div class="sc-val" style="color:var(--gold)">${best}만원</div></div>`;
+
+  renderAnalysis();
+  renderMypage();
+}
+
+/* ═══════════════════════════
+   AI 분석 렌더링
+═══════════════════════════ */
+function renderAnalysis() {
+  const p = currentUser.pension; if (!p) return;
+  const pct = Math.round(p.pension / p.target * 100);
+  document.getElementById('analysisArea').innerHTML = `
+    <div class="ab"><div class="ab-head"><span class="ab-icon">📊</span><span class="ab-title">현황 진단</span></div>
+    <div class="ab-body">납부 기간 <strong>${p.months}개월(${Math.floor(p.months/12)}년)</strong> 기준, 65세 예상 월 수령액은 <strong style="font-size:22px;color:var(--gold)">${p.pension}만원</strong>입니다. 목표 ${p.target}만원의 <strong style="color:var(--red)">${pct}%</strong>입니다.
+    <div style="margin-top:8px">
+      <span class="tag tag-r">달성률 ${pct}%</span>
+      ${p.irp === 0 ? '<span class="tag tag-r">IRP 미가입</span>' : '<span class="tag tag-g">IRP 가입중</span>'}
+      ${p.personal === 0 ? '<span class="tag tag-r">개인연금 미가입</span>' : '<span class="tag tag-g">개인연금 가입중</span>'}
+      ${p.retire > 0 ? '<span class="tag tag-g">퇴직연금 보유</span>' : '<span class="tag tag-r">퇴직연금 없음</span>'}
+    </div></div></div>
+    <div class="ab"><div class="ab-head"><span class="ab-icon">🎯</span><span class="ab-title">핵심 과제</span></div>
+    <div class="ab-body"><div style="display:flex;flex-direction:column;gap:8px">
+      ${p.unpaid > 0 ? `<div style="padding:11px;background:var(--red-bg);border-radius:8px"><div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:3px">🚨 즉시 — 미납 ${p.unpaid}만원 납부</div><div style="font-size:12px;color:var(--muted)">기한 내 납부하지 않으면 가입 기간 영구 손실.</div></div>` : ''}
+      ${p.irp === 0 ? `<div style="padding:11px;background:var(--warn-bg);border-radius:8px"><div style="font-size:13px;font-weight:700;color:var(--warn);margin-bottom:3px">⚠️ 단기 — IRP 즉시 가입</div><div style="font-size:12px;color:var(--muted)">월 ${p.extra}만원 납입 시 ${p.retireAge}세까지 약 ${Math.round(p.extra*12*(p.retireAge-50)*0.06/100)}억 예상. 연 세액공제 최대 148만원.</div></div>` : ''}
+      <div style="padding:11px;background:var(--blue-bg);border-radius:8px"><div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px">💡 연기연금 검토</div><div style="font-size:12px;color:var(--muted)">65세 대신 68세 수령 시 월 ${Math.round(p.pension*1.216)}만원으로 21.6% 증가.</div></div>
+    </div></div></div>
+    <div class="ab"><div class="ab-head"><span class="ab-icon">✅</span><span class="ab-title">지금 해야 할 행동</span></div>
+    <div class="ab-body">
+      <div class="act-item"><div class="act-num" style="background:var(--red)">1</div><div><div class="act-t">${p.unpaid > 0 ? '미납 보험료 납부' : '국민연금 납부 현황 확인'}</div><div class="act-s">국민연금 앱 → 납부/조회</div></div></div>
+      <div class="act-item"><div class="act-num" style="background:#d97706">2</div><div><div class="act-t">IRP 계좌 개설</div><div class="act-s">증권사 비대면 20분. 연 최대 148만원 절세</div></div></div>
+      <div class="act-item"><div class="act-num" style="background:var(--navy)">3</div><div><div class="act-t">연금저축펀드 병행 개설</div><div class="act-s">추가 세액공제 66만원. ETF 투자 가능</div></div></div>
+    </div></div>`;
+}
+
+/* ═══════════════════════════
+   마이페이지 렌더링
+═══════════════════════════ */
+function renderMypage() {
+  const u = currentUser; const p = u.pension;
+  document.getElementById('myAvatarBig').textContent = u.initial || u.name[0];
+  document.getElementById('myName').textContent      = u.name;
+  document.getElementById('myEmail').textContent     = u.email ? u.email.replace('@pensiongpt.local', '') : '';
+  document.getElementById('myJoined').textContent    = u.joinedAt ? '가입일: ' + u.joinedAt : '';
+  if (p) {
+    document.getElementById('mySummary').innerHTML = `
+      <div class="my-row"><span class="my-row-lbl">납부 기간</span><span class="my-row-val">${p.months}개월</span></div>
+      <div class="my-row"><span class="my-row-lbl">예상 월 수령액</span><span class="my-row-val">${p.pension}만원</span></div>
+      <div class="my-row"><span class="my-row-lbl">총 납부액</span><span class="my-row-val">${p.paid.toLocaleString()}만원</span></div>
+      <div class="my-row"><span class="my-row-lbl">퇴직연금</span><span class="my-row-val">${p.retire > 0 ? p.retire.toLocaleString() + '만원' : '미가입'}</span></div>
+      <div class="my-row"><span class="my-row-lbl">개인연금</span><span class="my-row-val">${p.personal > 0 ? p.personal.toLocaleString() + '만원' : '미가입'}</span></div>
+      <div class="my-row"><span class="my-row-lbl">IRP</span><span class="my-row-val">${p.irp > 0 ? p.irp.toLocaleString() + '만원' : '미가입'}</span></div>
+      <div class="my-row"><span class="my-row-lbl">목표 달성률</span><span class="my-row-val">${Math.round(p.pension/p.target*100)}%</span></div>`;
+    document.getElementById('myTarget').textContent    = p.target + '만원/월';
+    document.getElementById('myRetireAge').textContent = p.retireAge + '세';
+    document.getElementById('myLifeAge').textContent   = p.lifeAge + '세';
+  }
+}
+
+/* ═══════════════════════════
+   세액공제 계산기
+═══════════════════════════ */
+function calcTax() {
+  const irp = parseInt(document.getElementById('irpAmt').value);
+  const sav = parseInt(document.getElementById('savingAmt').value);
+  document.getElementById('irpAmtVal').textContent    = Math.round(irp / 10000) + '만원';
+  document.getElementById('savingAmtVal').textContent = Math.round(sav / 10000) + '만원';
+  const base = Math.min(irp + sav, 9000000);
+  document.getElementById('taxTotal').textContent  = Math.round((irp + sav) / 10000) + '만원';
+  document.getElementById('taxRefund').textContent = Math.round(base * 0.165 / 10000) + '만원';
 }
 </script>
 </body>
