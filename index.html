@@ -828,27 +828,31 @@ function activateUser(isNew, pensionData = null, goPensionInput = true) {
   document.getElementById('bnav').classList.add('show');
   setNav(0);
 
-  const hasPensionData = pensionData && (pensionData.retire + pensionData.personal + pensionData.irp) > 0;
+  // pensionData가 있으면 (0이어도) 금감원 조회 성공 → 2단계로
+  const fromCodef = pensionData !== null && goPensionInput !== false;
 
   if (!currentUser.pension || !currentUser.pension.months) {
     goScreen('pension-input');
 
-    if (hasPensionData) {
-      // 금융감독원 조회 성공 → 1단계 스킵, 바로 2단계
+    if (fromCodef) {
+      // 금융감독원 조회 후 → 무조건 2단계 (금액이 0이어도)
       piStep(2);
       setTimeout(() => {
-        document.getElementById('pi-retire').value       = pensionData.retire   || 0;
-        document.getElementById('pi-personal-amt').value = pensionData.personal || 0;
-        document.getElementById('pi-irp').value          = pensionData.irp      || 0;
+        document.getElementById('pi-retire').value        = pensionData.retire   || 0;
+        document.getElementById('pi-personal-amt').value  = pensionData.personal || 0;
+        document.getElementById('pi-irp').value           = pensionData.irp      || 0;
+        // 자동조회 성공 배너 표시
         document.getElementById('autoFilledCard').style.display = '';
-        document.getElementById('autoFillBadge').textContent   = '✅ 금융감독원 자동 입력됨';
+        const total = (pensionData.retire||0) + (pensionData.personal||0) + (pensionData.irp||0);
+        document.getElementById('autoFillBadge').textContent =
+          total > 0 ? `✅ 금융감독원 자동 입력됨 (합계 ${total.toLocaleString()}만원)` : '✅ 금융감독원 조회 완료 (가입 상품 없음)';
       }, 100);
     } else {
-      // 직접입력 / PDF → 1단계부터
+      // PDF / 직접입력 → 1단계
       piStep(1);
     }
   } else {
-    // 국민연금 포함 전체 데이터 있음 → 로딩 → 대시보드
+    // 이미 데이터 있음 → 대시보드
     goScreen('loading'); runLoading();
   }
 }
