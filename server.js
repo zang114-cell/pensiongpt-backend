@@ -52,6 +52,21 @@ app.get('/', (req, res) => {
   res.json({ service: '연금GPT 백엔드', status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// ── 환경변수 확인 (디버그용 — 확인 후 삭제) ──
+app.get('/debug/env', (req, res) => {
+  const id = CODEF_CLIENT_ID;
+  const secret = CODEF_CLIENT_SECRET;
+  res.json({
+    CLIENT_ID_SET: !!id,
+    CLIENT_ID_LENGTH: id ? id.length : 0,
+    CLIENT_ID_PREVIEW: id ? id.slice(0,8) + '...' : 'undefined',
+    CLIENT_SECRET_SET: !!secret,
+    CLIENT_SECRET_LENGTH: secret ? secret.length : 0,
+    CLIENT_SECRET_PREVIEW: secret ? secret.slice(0,8) + '...' : 'undefined',
+    NODE_ENV: process.env.NODE_ENV
+  });
+});
+
 // ── 헬스체크 ──
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
