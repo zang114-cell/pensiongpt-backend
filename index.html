@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -436,11 +437,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--t
       </div>
       <div class="pi-card">
         <div class="pi-h">💼 개인연금 · 퇴직연금 현황 <span style="font-size:11px;font-weight:400;color:var(--green)" id="autoFillBadge"></span></div>
-        <div class="pi-sub">없는 항목은 0으로 입력하세요.</div>
+        <div class="pi-sub">금융감독원에서 자동 조회된 금액을 확인하세요. 다르면 직접 수정할 수 있습니다.</div>
         <label class="f-lbl">퇴직연금 적립액 (만원)</label><input class="f-inp" id="pi-retire" type="number" placeholder="예: 3200" value="0">
         <label class="f-lbl">개인연금 적립액 (만원)</label><input class="f-inp" id="pi-personal-amt" type="number" placeholder="예: 800" value="0">
         <label class="f-lbl">IRP 적립액 (만원)</label><input class="f-inp" id="pi-irp" type="number" placeholder="예: 500" value="0">
         <label class="f-lbl">월 추가 저축 가능액 (만원)</label><input class="f-inp" id="pi-extra" type="number" placeholder="예: 50" value="30">
+        <div style="margin-top:14px;padding:12px;background:var(--blue-bg);border-radius:8px;font-size:12px;color:var(--blue);line-height:1.6">
+          💡 <strong>국민연금 정보는 선택사항입니다.</strong><br>
+          나중에 마이페이지 → 연금 정보 수정에서 국민연금 PDF를 업로드하거나 직접 입력할 수 있습니다.
+        </div>
       </div>
       <div style="display:flex;gap:10px">
         <button class="next-btn" style="background:var(--cream2);color:var(--text);flex:0 0 80px" onclick="piStep(1)">← 이전</button>
@@ -823,24 +828,27 @@ function activateUser(isNew, pensionData = null, goPensionInput = true) {
   document.getElementById('bnav').classList.add('show');
   setNav(0);
 
+  const hasPensionData = pensionData && (pensionData.retire + pensionData.personal + pensionData.irp) > 0;
+
   if (!currentUser.pension || !currentUser.pension.months) {
-    // 국민연금 정보 없음 → 입력 화면
-    goScreen('pension-input'); piStep(1);
-    // 금감원 데이터 자동 채우기
-    if (pensionData) {
+    goScreen('pension-input');
+
+    if (hasPensionData) {
+      // 금융감독원 조회 성공 → 1단계 스킵, 바로 2단계
+      piStep(2);
       setTimeout(() => {
-        document.getElementById('pi-retire').value      = pensionData.retire || 0;
+        document.getElementById('pi-retire').value       = pensionData.retire   || 0;
         document.getElementById('pi-personal-amt').value = pensionData.personal || 0;
-        document.getElementById('pi-irp').value          = pensionData.irp || 0;
-        const hasData = (pensionData.retire + pensionData.personal + pensionData.irp) > 0;
-        if (hasData) {
-          document.getElementById('autoFilledCard').style.display = '';
-          document.getElementById('autoFillBadge').textContent    = '✅ 금융감독원 자동 입력됨';
-        }
-      }, 200);
+        document.getElementById('pi-irp').value          = pensionData.irp      || 0;
+        document.getElementById('autoFilledCard').style.display = '';
+        document.getElementById('autoFillBadge').textContent   = '✅ 금융감독원 자동 입력됨';
+      }, 100);
+    } else {
+      // 직접입력 / PDF → 1단계부터
+      piStep(1);
     }
   } else {
-    // 국민연금 있음 → 로딩 → 대시보드
+    // 국민연금 포함 전체 데이터 있음 → 로딩 → 대시보드
     goScreen('loading'); runLoading();
   }
 }
@@ -885,20 +893,27 @@ function piStep(n) {
 }
 
 function finishInput() {
-  const p = {
-    months:   parseInt(document.getElementById('pi-months').value)       || 0,
-    paid:     parseInt(document.getElementById('pi-paid').value)         || 0,
-    pension:  parseInt(document.getElementById('pi-pension').value)      || 0,
-    unpaid:   parseFloat(document.getElementById('pi-unpaid').value)     || 0,
-    retire:   parseInt(document.getElementById('pi-retire').value)       || 0,
-    personal: parseInt(document.getElementById('pi-personal-amt').value) || 0,
-    irp:      parseInt(document.getElementById('pi-irp').value)          || 0,
-    extra:    parseInt(document.getElementById('pi-extra').value)        || 30,
-    target:   parseInt(document.getElementById('pi-target-range').value) || 300,
-    retireAge: parseInt(document.getElementById('pi-retire-age').value)  || 65,
-    lifeAge:   parseInt(document.getElementById('pi-life').value)        || 85,
-  };
-  if (!p.pension && p.months > 0) p.pension = Math.round(p.months * 0.42);
+  const retire   = parseInt(document.getElementById('pi-retire').value)       || 0;
+  const personal = parseInt(document.getElementById('pi-personal-amt').value) || 0;
+  const irp      = parseInt(document.getElementById('pi-irp').value)          || 0;
+  const extra    = parseInt(document.getElementById('pi-extra').value)        || 30;
+  const target   = parseInt(document.getElementById('pi-target-range').value) || 300;
+  const retireAge = parseInt(document.getElementById('pi-retire-age').value)  || 65;
+  const lifeAge   = parseInt(document.getElementById('pi-life').value)        || 85;
+
+  // 국민연금은 선택 (PDF/직접입력 안 했어도 진행 가능)
+  const months  = parseInt(document.getElementById('pi-months').value)  || 0;
+  const paid    = parseInt(document.getElementById('pi-paid').value)    || 0;
+  const pension = parseInt(document.getElementById('pi-pension').value) || (months > 0 ? Math.round(months * 0.42) : 0);
+  const unpaid  = parseFloat(document.getElementById('pi-unpaid').value) || 0;
+
+  // 개인연금이라도 있으면 진행
+  if (months === 0 && retire === 0 && personal === 0 && irp === 0) {
+    alert('국민연금 납부 기간 또는 개인연금 정보를 하나라도 입력해주세요.');
+    return;
+  }
+
+  const p = { months, paid, pension, unpaid, retire, personal, irp, extra, target, retireAge, lifeAge };
   currentUser.pension = p;
   const users = loadUsers();
   if (users[currentUser.email]) users[currentUser.email].pension = p;
