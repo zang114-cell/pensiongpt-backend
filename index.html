@@ -736,16 +736,34 @@ async function completeTwoWay() {
 }
 
 function onAuthSuccess(data, name, birth) {
+  // 전체 응답을 콘솔에 출력 (디버그)
+  console.log('CODEF 전체 응답:', JSON.stringify(data));
+
   const list = data.data?.resList || data.data || [];
   let retire = 0, personal = 0, irp = 0;
-  list.forEach(item => {
-    const amt  = Math.round(parseInt(item.reserveAmt || item.balance || item.pensionBalance || 0) / 10000);
-    const type = (item.pensionType || item.productType || '').toString();
-    if (type === '2' || type.toUpperCase().includes('IRP')) irp += amt;
-    else if (type === '3' || type === '4' || type.includes('퇴직')) retire += amt;
+
+  // 응답이 배열인지 객체인지 모두 처리
+  const items = Array.isArray(list) ? list : (list ? [list] : []);
+
+  items.forEach(item => {
+    console.log('연금 항목:', JSON.stringify(item));
+    const amt = Math.round(parseInt(
+      item.reserveAmt || item.balance || item.pensionBalance ||
+      item.totalAmt || item.amount || 0
+    ) / 10000);
+    const type = (item.pensionType || item.productType || item.pensionKindCode || '').toString().toUpperCase();
+    const name2 = (item.productName || item.pensionName || '').toUpperCase();
+
+    if (type.includes('IRP') || name2.includes('IRP') || type === '2') irp += amt;
+    else if (type.includes('퇴직') || type === '3' || type === '4' || name2.includes('퇴직')) retire += amt;
     else personal += amt;
   });
-  setAuthStatus('✅ 금융감독원 연금 정보 조회 완료!', 'success');
+
+  // 결과를 화면에 표시 (디버그)
+  const debugMsg = `조회완료 (항목 ${items.length}개) 퇴직:${retire}만 개인:${personal}만 IRP:${irp}만`;
+  setAuthStatus('✅ ' + debugMsg, 'success');
+  console.log(debugMsg);
+
   createAndLogin(name, birth, { retire, personal, irp });
 }
 
