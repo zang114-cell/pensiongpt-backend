@@ -11,10 +11,7 @@ const axios = require('axios');
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || '*', // Netlify 주소로 변경
-  credentials: true
-}));
+app.use(cors()); // 모든 출처 허용
 
 // ── 환경변수 (Railway에서 설정) ──
 const CODEF_CLIENT_ID     = process.env.CODEF_CLIENT_ID;
@@ -52,7 +49,23 @@ app.get('/', (req, res) => {
   res.json({ service: '연금GPT 백엔드', status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ── 환경변수 확인 (디버그용 — 확인 후 삭제) ──
+// ── 토큰 발급 테스트 ──
+app.get('/debug/token', async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    res.json({
+      success: true,
+      tokenPreview: token ? token.slice(0, 20) + '...' : 'none',
+      tokenLength: token ? token.length : 0
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      response: err.response?.data
+    });
+  }
+});
 app.get('/debug/env', (req, res) => {
   const id = CODEF_CLIENT_ID;
   const secret = CODEF_CLIENT_SECRET;
@@ -67,9 +80,26 @@ app.get('/debug/env', (req, res) => {
   });
 });
 
-// ── 헬스체크 ──
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// ── 연금 조회 응답 로깅 (디버그용) ──
+app.post('/api/pension/my-pension-debug', async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    const { userName, identity, loginType } = req.body;
+    const response = await axios.post(
+      `${CODEF_BASE_URL}/v1/kr/public/fs/pension/my-pension`,
+      { organization: '0001', loginType, userName, identity },
+      { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
+    );
+    // 전체 응답 그대로 반환 (디버그용)
+    res.json({ 
+      fullResponse: response.data,
+      dataKeys: response.data.data ? Object.keys(response.data.data) : [],
+      resultCode: response.data.result?.code,
+      resultMsg: response.data.result?.message
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.response?.data || err.message });
+  }
 });
 
 // ══════════════════════════════════════════════
