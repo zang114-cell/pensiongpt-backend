@@ -166,7 +166,13 @@ app.post('/api/pension/my-pension', async (req, res) => {
         }
       }
     );
-    res.json(response.data);
+
+    // CODEF 응답이 URL 인코딩된 문자열인 경우 디코딩
+    let data = response.data;
+    if (typeof data === 'string') {
+      try { data = JSON.parse(decodeURIComponent(data)); } catch(e) {}
+    }
+    res.json(data);
   } catch (err) {
     console.error('my-pension error:', err.response?.data || err.message);
     res.status(500).json({ error: err.response?.data || err.message });
