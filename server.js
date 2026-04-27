@@ -128,8 +128,7 @@ app.post('/api/pension/check-member', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════
-// STEP 2: 금융감독원 내 연금정보 조회
-// (개인연금 + IRP + 퇴직연금 한번에)
+// STEP 2: 국민연금 가입내역 조회
 // ══════════════════════════════════════════════
 app.post('/api/pension/my-pension', async (req, res) => {
   try {
@@ -137,12 +136,45 @@ app.post('/api/pension/my-pension', async (req, res) => {
     const { userName, identity, loginType, twoWayInfo } = req.body;
 
     const body = {
-      organization: '0001',
-      loginType: loginType || '5', // 5: 간편인증, 0: 공동인증서
+      organization: '0002',
+      loginType: loginType || '5',
       userName,
       identity,
     };
-    // 2차 인증(간편인증 승인 후 재요청) 처리
+    if (twoWayInfo) body.twoWayInfo = twoWayInfo;
+
+    // 국민연금 가입내역 조회
+    const response = await axios.post(
+      `${CODEF_BASE_URL}/v1/kr/public/pp/nps-minwon/member-join-history`,
+      body,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    res.json(response.data);
+  } catch (err) {
+    console.error('my-pension error:', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data || err.message });
+  }
+});
+
+// ══════════════════════════════════════════════
+// STEP 2-2: 금융감독원 개인연금·IRP 조회
+// ══════════════════════════════════════════════
+app.post('/api/pension/private', async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    const { userName, identity, loginType, twoWayInfo } = req.body;
+
+    const body = {
+      organization: '0001',
+      loginType: loginType || '5',
+      userName,
+      identity,
+    };
     if (twoWayInfo) body.twoWayInfo = twoWayInfo;
 
     const response = await axios.post(
@@ -157,7 +189,7 @@ app.post('/api/pension/my-pension', async (req, res) => {
     );
     res.json(response.data);
   } catch (err) {
-    console.error('my-pension error:', err.response?.data || err.message);
+    console.error('private pension error:', err.response?.data || err.message);
     res.status(500).json({ error: err.response?.data || err.message });
   }
 });
