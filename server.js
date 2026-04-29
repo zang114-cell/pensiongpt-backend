@@ -185,6 +185,52 @@ app.post('/api/pension/private', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════
+// 금융감독원 노후재무설계 조회
+// ══════════════════════════════════════════════
+app.post('/api/pension/financial-plan', async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    const { userName, identity, loginType, loginTypeLevel, phoneNo,
+            retirementAge, livingAmt, twoWayInfo, is2Way, simpleAuth } = req.body;
+
+    const body = {
+      organization: '0001',
+      loginType: loginType || '5',
+      userName,
+      identity,
+      retirementAge: retirementAge || '65',
+      livingAmt: livingAmt || '3000', // 월 생활비 (천원 단위)
+    };
+
+    if (loginType === '5') {
+      body.loginTypeLevel = loginTypeLevel || '1';
+      body.phoneNo = phoneNo || '';
+    }
+
+    if (is2Way) {
+      body.is2Way = true;
+      body.simpleAuth = simpleAuth || '1';
+      body.twoWayInfo = twoWayInfo;
+    }
+
+    const response = await axios.post(
+      `${CODEF_BASE_URL}/v1/kr/public/fs/financial-plan/search`,
+      body,
+      { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
+    );
+
+    let data = response.data;
+    if (typeof data === 'string') {
+      try { data = JSON.parse(decodeURIComponent(data)); } catch(e) {}
+    }
+    res.json(data);
+  } catch (err) {
+    console.error('financial-plan error:', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data || err.message });
+  }
+});
+
+// ══════════════════════════════════════════════
 // STEP 3: 국민연금 예상수령액 조회
 // ══════════════════════════════════════════════
 app.post('/api/pension/nps', async (req, res) => {
